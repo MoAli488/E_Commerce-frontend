@@ -1,0 +1,44 @@
+@if (myProduct) {
+  <main class="detail-page">
+    <a class="back-link" routerLink="/product-list">← Back to shop</a>
+    <section class="detail-grid">
+      <div class="detail-image">
+        <img [src]="staticURL + myProduct.imageURL" [alt]="myProduct.title" />
+      </div>
+      <div class="detail-copy">
+        <span class="eyebrow">
+          @if (myProduct.subCategory?.name && myProduct.subCategory?.name !== myProduct.category?.name) {
+            {{ myProduct.category?.name }} · {{ myProduct.subCategory?.name }}
+          } @else {
+            {{ myProduct.category?.name || 'THE FORM COLLECTION' }}
+          }
+        </span>
+        <h1>{{ myProduct.title }}</h1>
+        <p class="detail-price">${{ myProduct.price }}</p>
+        <p class="detail-description">{{ myProduct.description }}</p>
+        <div class="detail-meta">
+          <span>Thoughtfully made</span>
+          <span>
+            @if (myProduct.stock <= 0) {
+              Currently unavailable
+            } @else if (myProduct.stock <= 3) {
+              Only {{ myProduct.stock }} left in stock
+            } @else {
+              In stock
+            }
+          </span>
+        </div>
+        <button
+          class="add-button"
+          type="button"
+          [disabled]="myProduct.stock <= 0"
+        >
+          {{ myProduct.stock > 0 ? 'Add to bag' : 'Out of stock' }} <span>↗</span>
+        </button>
+        <p class="detail-note">
+          Free shipping on orders over $75. Easy returns within 30 days.
+        </p>
+      </div>
+    </section>
+  </main>
+}

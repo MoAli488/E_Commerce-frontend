@@ -1,0 +1,57 @@
+<main class="auth-page">
+  <section class="auth-card" aria-labelledby="login-title">
+    <div class="auth-intro">
+      <span class="eyebrow">WELCOME BACK</span>
+      <h1 id="login-title">Good to see<br /><em>you again.</em></h1>
+      <p>Sign in to keep your everyday favourites close.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label for="login-email">Email address</label>
+        <input
+          id="login-email"
+          type="email"
+          autocomplete="email"
+          formControlName="email"
+          placeholder="you@example.com"
+        />
+        @if (
+          loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+        ) {
+          <small class="field-error">Enter a valid email address.</small>
+        }
+      </div>
+      <div class="field">
+        <div class="field-heading">
+          <label for="login-password">Password</label
+          ><a routerLink="/signup">Need an account?</a>
+        </div>
+        <input
+          id="login-password"
+          type="password"
+          autocomplete="current-password"
+          formControlName="password"
+          placeholder="Your password"
+        />
+        @if (
+          loginForm.get('password')?.invalid &&
+          loginForm.get('password')?.touched
+        ) {
+          <small class="field-error">Password is required.</small>
+        }
+      </div>
+      <button type="submit" class="submit-btn" [disabled]="loginForm.invalid">
+        Sign in <span>↗</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      New here? <a routerLink="/signup">Create an account</a>
+    </p>
+  </section>
+  <div class="auth-aside">
+    <span>FORM / 01</span><strong>Less, but better.</strong
+    ><small>Thoughtful essentials for your every day.</small>
+  </div>
+</main>

@@ -1,0 +1,147 @@
+:host {
+  display: block;
+}
+
+.announcement {
+  background: #292e27;
+  color: #f5f3eb;
+  text-align: center;
+  padding: 10px 12px;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+
+.announcement span {
+  color: #d89a79;
+  padding: 0 12px;
+}
+
+.nav-wrap {
+  min-height: 78px;
+  padding: 0 5.5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e8e8e0;
+  background: #fbfaf6;
+  gap: 20px;
+}
+
+.brand {
+  font-size: 34px;
+  letter-spacing: -2px;
+  font-weight: 700;
+  color: #292e27;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.brand span {
+  color: #b86e50;
+}
+
+.nav-wrap nav {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.nav-wrap nav a,
+.account-link {
+  font-size: 11px;
+  text-decoration: none;
+  color: #686e63;
+  transition: color .2s;
+}
+
+.nav-wrap nav a:hover,
+.nav-wrap nav a.active,
+.account-link:hover {
+  color: #a45d42;
+}
+
+.nav-wrap nav a:focus-visible,
+.account-link:focus-visible,
+.bag-link:focus-visible,
+.logout-btn:focus-visible {
+  outline: 2px solid #a45d42;
+  outline-offset: 5px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.bag-link {
+  font-size: 11px;
+  color: #fff;
+  background: #292e27;
+  padding: 12px 16px;
+  text-decoration: none;
+  transition: background .2s;
+}
+
+.bag-link:hover {
+  background: #a45d42;
+}
+
+.bag-link span {
+  margin-left: 12px;
+}
+
+.logout-btn {
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  cursor: pointer;
+  color: #a45d42;
+  padding: 4px;
+}
+
+.logout-btn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .nav-wrap {
+    min-height: 70px;
+    flex-wrap: wrap;
+    padding: 15px 5%;
+    gap: 16px;
+  }
+
+  .brand {
+    font-size: 30px;
+  }
+
+  .nav-wrap nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: clamp(18px, 7vw, 32px);
+    padding: 10px 0 3px;
+    border-top: 1px solid #e8e8e0;
+  }
+
+  .nav-actions {
+    gap: 12px;
+  }
+
+  .announcement {
+    font-size: 8px;
+    letter-spacing: .7px;
+  }
+}
+
+@media (max-width: 390px) {
+  .account-link,
+  .nav-wrap nav a {
+    font-size: 10px;
+  }
+
+  .bag-link {
+    padding: 10px 11px;
+  }
+}

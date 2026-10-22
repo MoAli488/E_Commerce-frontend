@@ -1,0 +1,229 @@
+<section class="create-page">
+  <div class="create-header">
+    <div class="header-titles">
+      <span class="eyebrow">ADMIN DASHBOARD</span>
+      <h1>Create <em>product.</em></h1>
+      <p>
+        Add a new piece to the collection with details, inventory, and imagery.
+      </p>
+    </div>
+    <a routerLink="/product-list" class="back-link">← Back to catalogue</a>
+  </div>
+
+  @if (statusMessage) {
+    <div
+      class="status-alert"
+      [class.status-success]="statusMessage.type === 'success'"
+      [class.status-error]="statusMessage.type === 'error'"
+    >
+      <span>{{ statusMessage.type === 'success' ? '✓' : '!' }}</span>
+      <p>{{ statusMessage.text }}</p>
+    </div>
+  }
+
+  <form
+    [formGroup]="productForm"
+    (ngSubmit)="onSubmit()"
+    class="product-form"
+    novalidate
+  >
+    <div class="form-columns">
+      <!-- Left Column: Details -->
+      <div class="form-card details-card">
+        <h2 class="card-title">General Information</h2>
+
+        <div class="field">
+          <label for="product-title">Product Title *</label>
+          <input
+            id="product-title"
+            type="text"
+            formControlName="title"
+            placeholder="e.g. Linen Relaxed Overshirt"
+            [class.input-error]="
+              productForm.get('title')?.invalid &&
+              productForm.get('title')?.touched
+            "
+          />
+          @if (
+            productForm.get('title')?.invalid &&
+            productForm.get('title')?.touched
+          ) {
+            <small class="field-error"
+              >Title must be at least 3 characters long.</small
+            >
+          }
+        </div>
+
+        <div class="field">
+          <label for="product-description">Description *</label>
+          <textarea
+            id="product-description"
+            rows="5"
+            formControlName="description"
+            placeholder="Describe the fabric, fit, styling notes, and details..."
+            [class.input-error]="
+              productForm.get('description')?.invalid &&
+              productForm.get('description')?.touched
+            "
+          ></textarea>
+          @if (
+            productForm.get('description')?.invalid &&
+            productForm.get('description')?.touched
+          ) {
+            <small class="field-error"
+              >Description must be at least 10 characters long.</small
+            >
+          }
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="product-category">Category *</label>
+            <input
+              id="product-category"
+              type="text"
+              formControlName="category"
+              placeholder="e.g. Shirts, Pants, Outerwear"
+              [class.input-error]="
+                productForm.get('category')?.invalid &&
+                productForm.get('category')?.touched
+              "
+            />
+            @if (
+              productForm.get('category')?.invalid &&
+              productForm.get('category')?.touched
+            ) {
+              <small class="field-error">Category is required.</small>
+            }
+          </div>
+
+          <div class="field">
+            <label for="product-subcategory">Subcategory (Optional)</label>
+            <input
+              id="product-subcategory"
+              type="text"
+              formControlName="subCategory"
+              placeholder="e.g. Linen Shirts"
+            />
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="product-price">Price ($ USD) *</label>
+            <input
+              id="product-price"
+              type="number"
+              step="0.01"
+              min="0.01"
+              formControlName="price"
+              placeholder="0.00"
+              [class.input-error]="
+                productForm.get('price')?.invalid &&
+                productForm.get('price')?.touched
+              "
+            />
+            @if (
+              productForm.get('price')?.invalid &&
+              productForm.get('price')?.touched
+            ) {
+              <small class="field-error"
+                >Enter a valid price greater than 0.</small
+              >
+            }
+          </div>
+
+          <div class="field">
+            <label for="product-stock">Initial Stock *</label>
+            <input
+              id="product-stock"
+              type="number"
+              min="0"
+              formControlName="stock"
+              placeholder="0"
+              [class.input-error]="
+                productForm.get('stock')?.invalid &&
+                productForm.get('stock')?.touched
+              "
+            />
+            @if (
+              productForm.get('stock')?.invalid &&
+              productForm.get('stock')?.touched
+            ) {
+              <small class="field-error">Stock cannot be negative.</small>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Media Upload -->
+      <div class="form-card media-card">
+        <h2 class="card-title">Product Image *</h2>
+        <p class="card-subtitle">
+          Upload a clean, high-resolution photo for the catalog showcase.
+        </p>
+
+        <div class="upload-zone" [class.has-preview]="imagePreview">
+          @if (!imagePreview) {
+            <label for="file-upload" class="upload-label">
+              <span class="upload-icon">📷</span>
+              <strong>Click to upload an image</strong>
+              <small>JPEG, PNG, WebP up to 5MB</small>
+            </label>
+          } @else {
+            <div class="preview-wrapper">
+              <img
+                [src]="imagePreview"
+                alt="Product preview"
+                class="preview-img"
+              />
+              <button
+                type="button"
+                class="remove-img-btn"
+                (click)="removeImage()"
+              >
+                Remove image ×
+              </button>
+            </div>
+          }
+          <input
+            id="file-upload"
+            type="file"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="file-input"
+          />
+        </div>
+
+        @if (!selectedFile && productForm.touched) {
+          <small class="field-error">Product image is required.</small>
+        }
+
+        <aside class="aside-note">
+          <span>TIPS</span>
+          <p>
+            Categories and subcategories automatically generate searchable slugs
+            on the backend.
+          </p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        [disabled]="isSubmitting || productForm.invalid || !selectedFile"
+        [ngClass]="{
+          'submit-btn': !productForm.invalid && selectedFile && !isSubmitting,
+          'disable-submit-btn':
+            productForm.invalid || !selectedFile || isSubmitting,
+        }"
+      >
+        <span>{{
+          isSubmitting ? 'Publishing product...' : 'Publish product'
+        }}</span>
+        <span class="arrow">↗</span>
+      </button>
+    </div>
+  </form>
+</section>

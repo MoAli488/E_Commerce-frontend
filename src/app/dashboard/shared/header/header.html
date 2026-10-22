@@ -1,0 +1,26 @@
+<div class="site-header">
+  <div class="announcement">
+    A BETTER KIND OF EVERYDAY <span>✳</span> FREE SHIPPING ON ORDERS OVER $75
+  </div>
+  <header class="nav-wrap">
+    <a class="brand" routerLink="/home" aria-label="My Store home"
+      >form<span>.</span></a
+    >
+    <nav aria-label="Main navigation">
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+      <a routerLink="/product-list" routerLinkActive="active">Shop all</a>
+      <a routerLink="/home" fragment="collection">New arrivals</a>
+    </nav>
+    <div class="nav-actions">
+      @if (userData) {
+        <a class="account-link" routerLink="/user-profile"
+          >Hi, {{ userData.name | titlecase }}</a
+        >
+        <button class="logout-btn" (click)="logout()">Log out</button>
+      } @else {
+        <a class="account-link" routerLink="/login">Log in</a>
+        <a class="bag-link" routerLink="/signup">Sign up <span>↗</span></a>
+      }
+    </div>
+  </header>
+</div>

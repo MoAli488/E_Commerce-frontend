@@ -1,0 +1,14 @@
+<a class="product-tile" [routerLink]="'/product-details/' + myProduct.slug">
+  <div class="tile-image">
+    <img
+      [src]="staticURL + myProduct.imageURL"
+      [alt]="myProduct.title"
+      loading="lazy"
+    />
+    <span class="tile-action">View details ↗</span>
+  </div>
+  <div class="tile-info">
+    <h3>{{ myProduct.title }}</h3>
+    <span>Discover the details</span>
+  </div>
+</a>

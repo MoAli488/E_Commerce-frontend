@@ -1,0 +1,29 @@
+<main class="profile-page">
+  <section class="profile-heading">
+    <span class="eyebrow">YOUR FORM / PROFILE</span>
+    <h1>
+      Welcome home,<br /><em>{{ user.name }}.</em>
+    </h1>
+    <p>Your account is the easy way to keep the good stuff close.</p>
+  </section>
+
+  <section class="profile-grid">
+    <article class="profile-card profile-card--dark">
+      <span class="card-label">ACCOUNT DETAILS</span>
+      <div class="profile-initial">{{ user.name | titlecase }}</div>
+      <h2>{{ user.name }}</h2>
+      <p>Your account is ready for whatever comes next.</p>
+      <span class="member-note">FORM member</span>
+    </article>
+    <article class="profile-card">
+      <span class="card-label">YOUR NEXT MOVE</span>
+      <h2>Find something<br /><em>you'll live in.</em></h2>
+      <p>
+        Explore considered essentials, made for wherever your day takes you.
+      </p>
+      <a class="profile-link" routerLink="/product-list"
+        >Shop the collection <span>↗</span></a
+      >
+    </article>
+  </section>
+</main>

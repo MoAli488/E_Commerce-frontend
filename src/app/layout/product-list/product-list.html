@@ -1,0 +1,39 @@
+<main class="catalog">
+  <div class="catalog-intro">
+    <span class="eyebrow">THE FORM COLLECTION</span>
+    <h1>Find your <em>everyday.</em></h1>
+    <p>
+      Good design, great fabrics, no fuss. Meet the pieces you'll reach for
+      again and again.
+    </p>
+  </div>
+  <div class="catalog-toolbar">
+    <span
+      >OUR PRODUCTS
+      @if (!loading && !errorMessage) {
+        <small>{{ products.length }} pieces</small>
+      }</span
+    ><span>New season · Timeless by design</span>
+  </div>
+  @if (loading) {
+    <div class="catalog-state">
+      <span class="state-mark">✳</span>
+      <p>Gathering the collection...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="catalog-state">
+      <span class="state-mark">—</span>
+      <p>{{ errorMessage }}</p>
+    </div>
+  } @else {
+    <div class="catalog-grid">
+      @for (product of products; track product.slug) {
+        <app-product [myProduct]="product"></app-product>
+      } @empty {
+        <p class="empty-state">
+          Products are not available right now. Please try again shortly.
+        </p>
+      }
+    </div>
+  }
+</main>
