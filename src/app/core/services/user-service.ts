@@ -9,12 +9,12 @@ export class UserService {
   private _httpClient = inject(HttpClient);
   private readonly _apiURL = enviroment.apiURL + 'user';
 
-  getAllUsers(): Observable<IUserListRes> | undefined {
+  getAllUsers(): Observable<IUserListRes> {
     return this._httpClient.get<IUserListRes>(this._apiURL);
   }
 
-  getUserByEmail(): Observable<IUserRes> | undefined {
-    return this._httpClient.get<IUserRes>(this._apiURL);
+  getUserByEmail(email: string): Observable<IUserRes> {
+    return this._httpClient.get<IUserRes>(`${this._apiURL}/${email}`);
   }
 
   // TODO: rest of the APIs

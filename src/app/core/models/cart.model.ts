@@ -1,14 +1,26 @@
-export interface CartItem {
+import { IProduct } from './product.model';
+
+export interface ICartItem {
   _id: string;
-  cart: string;
-  item: string;
+  cart: string; // cartId
+  item: IProduct;
   oldPrice?: number;
   quantity: number;
   isPriceChanged?: boolean;
 }
 
-export interface Cart {
+export interface ICart {
   _id: string;
   user: string;
-  cartItems: CartItem[];
+  cartItems: ICartItem[];
+}
+
+export interface ICartRes {
+  message: string;
+  data: ICart;
+}
+
+export interface ICartReq {
+  item: string;
+  quantity: number;
 }

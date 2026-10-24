@@ -7,7 +7,10 @@
       </div>
       <div class="detail-copy">
         <span class="eyebrow">
-          @if (myProduct.subCategory?.name && myProduct.subCategory?.name !== myProduct.category?.name) {
+          @if (
+            myProduct.subCategory?.name &&
+            myProduct.subCategory?.name !== myProduct.category?.name
+          ) {
             {{ myProduct.category?.name }} · {{ myProduct.subCategory?.name }}
           } @else {
             {{ myProduct.category?.name || 'THE FORM COLLECTION' }}
@@ -32,8 +35,10 @@
           class="add-button"
           type="button"
           [disabled]="myProduct.stock <= 0"
+          (click)="addToCart()"
         >
-          {{ myProduct.stock > 0 ? 'Add to bag' : 'Out of stock' }} <span>↗</span>
+          {{ myProduct.stock > 0 ? 'Add to bag' : 'Out of stock' }}
+          <span>↗</span>
         </button>
         <p class="detail-note">
           Free shipping on orders over $75. Easy returns within 30 days.

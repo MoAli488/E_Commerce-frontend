@@ -9,6 +9,9 @@ import { Dashboard } from './dashboard/dashboard';
 import { CreateProduct } from './dashboard/create-product/create-product';
 import { Home as HomeDashboard } from './dashboard/home/home';
 import { NotFound } from './shared/not-found/not-found';
+import { UserProfile } from './layout/user-profile/user-profile';
+import { Cart } from './layout/cart/cart';
+import { Checkout } from './layout/cart/checkout/checkout';
 
 export const routes: Routes = [
   {
@@ -19,8 +22,11 @@ export const routes: Routes = [
       { path: 'home', component: HomeLayout },
       { path: 'login', component: Login },
       { path: 'signup', component: Signup },
+      { path: 'user-profile', component: UserProfile },
       { path: 'product-list', component: ProductList },
       { path: 'product-details/:slug', component: ProductDetails },
+      { path: 'cart', component: Cart },
+      { path: 'cart/checkout', component: Checkout },
     ],
   },
   {

@@ -127,9 +127,9 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
           case 404: {
             // Not Found
             console.warn(`[404 Not Found] Resource not found: ${req.url}`);
-            if (router) {
-              router.navigate(['/not-found']);
-            }
+            // if (router) {
+            //   router.navigate(['/not-found']);
+            // }
             break;
           }
           case 500:

@@ -9,6 +9,9 @@
     <nav aria-label="Main navigation">
       <a routerLink="/home" routerLinkActive="active">Home</a>
       <a routerLink="/product-list" routerLinkActive="active">Shop all</a>
+      @if (userData) {
+        <a routerLink="/cart" routerLinkActive="active">Cart</a>
+      }
     </nav>
     <div class="nav-actions">
       @if (userData) {
