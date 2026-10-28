@@ -6,6 +6,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
+import { CartService } from '../../core/services/cart-service';
 import { ILoginReq } from '../../core/models/auth.model';
 
 @Component({
@@ -16,6 +17,7 @@ import { ILoginReq } from '../../core/models/auth.model';
 })
 export class Login {
   private _authService = inject(AuthService);
+  private _cartService = inject(CartService);
   loginForm = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
@@ -34,6 +36,7 @@ export class Login {
         .subscribe({
           next: (res) => {
             console.log('Login success:', res);
+            this._cartService.mergeCart();
             this.loginForm.reset();
           },
           error: (err) => {

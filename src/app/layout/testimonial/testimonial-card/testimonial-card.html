@@ -1,0 +1,32 @@
+@if (testimonial) {
+  <article class="card">
+    <div class="card-header">
+      <div class="stars" [attr.aria-label]="testimonial.rate + ' out of 5 stars'">
+        @for (s of [1, 2, 3, 4, 5]; track s) {
+          <span class="star" [class.filled]="s <= testimonial.rate">★</span>
+        }
+      </div>
+      <span class="card-date">{{ testimonial.date || testimonial.createdAt | date:'MMM d, y' }}</span>
+    </div>
+
+    @if (testimonial.subject) {
+      <h3 class="card-subject">“{{ testimonial.subject }}”</h3>
+    }
+
+    <blockquote class="card-comment">
+      {{ testimonial.comment }}
+    </blockquote>
+
+    <div class="card-footer">
+      <div class="avatar" aria-hidden="true">
+        {{ (testimonial.user.name || 'C').charAt(0).toUpperCase() }}
+      </div>
+      <div class="author-details">
+        <span class="author-name">{{ testimonial.user.name || 'Verified Customer' }}</span>
+        <span class="verified-badge">
+          <span class="check-icon">✓</span> Verified Customer
+        </span>
+      </div>
+    </div>
+  </article>
+}

@@ -1,0 +1,115 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e7e8e1;
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #d1d3c8;
+  box-shadow: 0 12px 30px rgba(32, 36, 31, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 14px;
+  color: #ddd;
+}
+
+.star.filled {
+  color: #c56b4b;
+}
+
+.card-date {
+  font-size: 11px;
+  color: #9da197;
+}
+
+.card-subject {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0 0 12px;
+  color: #20241f;
+  font-family: Georgia, serif;
+}
+
+.card-comment {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #555b50;
+  margin: 0 0 24px;
+  flex-grow: 1;
+  font-style: normal;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid #f1f2ec;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: #eeeee7;
+  color: #252b24;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.author-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #20241f;
+}
+
+.verified-badge {
+  font-size: 10px;
+  color: #5a7b5e;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.check-icon {
+  font-size: 10px;
+  font-weight: bold;
+}
+

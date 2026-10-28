@@ -1,0 +1,205 @@
+<section
+  class="testimonials"
+  id="testimonials"
+  aria-labelledby="testimonials-heading"
+>
+  <div class="testimonials-inner">
+    <div class="section-top">
+      <div class="top-copy">
+        <span class="eyebrow"><span class="dot"></span> WHAT CLIENTS SAY</span>
+        <h2 id="testimonials-heading">
+          Loved by those<br />who <em>live in it.</em>
+        </h2>
+        <p class="subtitle">
+          Real words from our community. Every piece is crafted for comfort,
+          longevity, and everyday ease.
+        </p>
+      </div>
+
+      <div class="top-meta">
+        <div class="rating-badge">
+          <div class="score">
+            <span class="score-num">{{ averageRating }}</span>
+            <div
+              class="score-stars"
+              aria-label="Rating: {{ averageRating }} out of 5 stars"
+            >
+              ★★★★★
+            </div>
+          </div>
+          <span class="score-label"
+            >Based on {{ testimonials.length }} community reviews</span
+          >
+        </div>
+
+        <button type="button" class="write-btn" (click)="openModal()">
+          Share your review <span>↗</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Testimonial Cards Grid -->
+    <div class="cards-grid">
+      @for (item of testimonials; track item._id || $index) {
+        <app-testimonial-card [testimonial]="item"></app-testimonial-card>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Review Modal -->
+@if (isModalOpen) {
+  <div class="modal-backdrop" (click)="closeModal()" aria-hidden="true"></div>
+  <div
+    class="modal-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    tabindex="-1"
+  >
+    <button
+      type="button"
+      class="close-btn"
+      (click)="closeModal()"
+      aria-label="Close modal"
+    >
+      ✕
+    </button>
+
+    @if (!isLoggedIn) {
+      <div class="login-prompt">
+        <span class="eyebrow"><span class="dot"></span> SIGN IN REQUIRED</span>
+        <h3 id="modal-title">Join our community</h3>
+        <p>
+          Please log in to your account to share your testimonial and help
+          others choose their essentials.
+        </p>
+        <div class="prompt-actions">
+          <a routerLink="/login" class="primary-btn" (click)="closeModal()"
+            >Log in to continue <span>↗</span></a
+          >
+          <button type="button" class="secondary-btn" (click)="closeModal()">
+            Close
+          </button>
+        </div>
+      </div>
+    } @else if (submissionSuccess) {
+      <div class="success-view">
+        <div class="success-icon">✓</div>
+        <h3 id="modal-title">Thank you, {{ currentUser?.name }}!</h3>
+        <p>
+          Your review has been submitted for admin approval. Once approved, it
+          will be visible on the home page.
+        </p>
+        <button type="button" class="primary-btn" (click)="closeModal()">
+          Done
+        </button>
+      </div>
+    } @else {
+      <div class="form-view">
+        <span class="eyebrow"
+          ><span class="dot"></span> WRITE A TESTIMONIAL</span
+        >
+        <h3 id="modal-title">Share your thoughts</h3>
+        <p class="modal-sub">
+          Tell us about the quality, feel, and fit of your pieces.
+        </p>
+
+        @if (formError) {
+          <div class="error-banner">{{ formError }}</div>
+        }
+
+        <form (ngSubmit)="submitReview()">
+          <div class="form-group">
+            <label class="field-label">Your Rating</label>
+            <div
+              class="star-picker"
+              role="radiogroup"
+              aria-label="Select rating"
+            >
+              @for (val of [1, 2, 3, 4, 5]; track val) {
+                <button
+                  type="button"
+                  class="picker-star"
+                  [class.active]="val <= newRate"
+                  (click)="setRating(val)"
+                  [attr.aria-label]="val + ' stars'"
+                >
+                  ★
+                </button>
+              }
+              <span class="rating-text">
+                @switch (newRate) {
+                  @case (5) {
+                    Excellent (5/5)
+                  }
+                  @case (4) {
+                    Great (4/5)
+                  }
+                  @case (3) {
+                    Good (3/5)
+                  }
+                  @case (2) {
+                    Fair (2/5)
+                  }
+                  @case (1) {
+                    Poor (1/5)
+                  }
+                }
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="review-subject" class="field-label"
+              >Headline / Subject (Optional)</label
+            >
+            <input
+              id="review-subject"
+              type="text"
+              name="subject"
+              [(ngModel)]="newSubject"
+              placeholder="e.g., Timeless cut, exceptional fabric"
+              class="form-input"
+              maxlength="50"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="review-comment" class="field-label"
+              >Review Comment *</label
+            >
+            <textarea
+              id="review-comment"
+              name="comment"
+              [(ngModel)]="newComment"
+              rows="4"
+              placeholder="How do the items feel? How was the sizing, delivery, and overall experience?"
+              class="form-textarea"
+              required
+            ></textarea>
+          </div>
+
+          <p class="form-disclaimer">
+            All reviews are verified by our team before being displayed.
+          </p>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="secondary-btn"
+              (click)="closeModal()"
+              [disabled]="isSubmitting"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="primary-btn" [disabled]="isSubmitting">
+              {{ isSubmitting ? 'Submitting...' : 'Submit Review' }}
+              <span>↗</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+}

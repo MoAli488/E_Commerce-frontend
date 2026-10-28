@@ -4,9 +4,10 @@ import { ICategory } from '../../core/models/category.model';
 import { enviroment } from '../../../../enviroment/env';
 import { IProduct } from '../../core/models/product.model';
 import { RouterLink } from '@angular/router';
+import { Testimonial } from '../testimonial/testimonial';
 
 @Component({
-  imports: [NgClass, RouterLink],
+  imports: [NgClass, RouterLink, Testimonial],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',

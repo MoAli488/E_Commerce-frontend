@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { PasswordValidator } from '../../core/validators/password.validator';
 import { AuthService } from '../../core/services/auth-service';
+import { CartService } from '../../core/services/cart-service';
 import { ISignupReq } from '../../core/models/auth.model';
 import { NgClass } from '@angular/common';
 
@@ -18,6 +19,7 @@ import { NgClass } from '@angular/common';
 })
 export class Signup {
   private _authService = inject(AuthService);
+  private _cartService = inject(CartService);
   signupForm = new FormGroup({
     name: new FormControl('', {
       nonNullable: true,
@@ -53,6 +55,7 @@ export class Signup {
         .subscribe({
           next: (res) => {
             console.log('Signup success:', res);
+            this._cartService.mergeCart();
             this.signupForm.reset();
           },
           error: (err) => {
