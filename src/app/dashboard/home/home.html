@@ -4,7 +4,7 @@
     <div class="dash-home__titles">
       <span class="eyebrow">ADMINISTRATION OVERVIEW</span>
       <h1>Welcome to <em>Store Control.</em></h1>
-      <p>Live inventory, user management, and order fulfillment at a glance.</p>
+      <p>Live inventory, customer feedback, and order fulfillment at a glance.</p>
     </div>
     <div class="dash-home__actions">
       <a routerLink="/dashboard/create-product" class="btn btn--primary">+ New Product</a>
@@ -14,26 +14,26 @@
 
   <!-- Metrics Grid -->
   <div class="metrics-grid">
-    <!-- Card 1: Products -->
-    <a routerLink="/dashboard/products" class="metric-card">
+    <!-- Card 0: Revenue -->
+    <a routerLink="/dashboard/orders" class="metric-card">
       <div class="metric-card__top">
-        <span class="metric-card__label">PRODUCTS IN CATALOG</span>
-        <span class="metric-card__icon">📦</span>
+        <span class="metric-card__label">TOTAL REVENUE</span>
+        <span class="metric-card__icon">💰</span>
       </div>
       <div class="metric-card__val">
-        @if (productCount() === null) {
+        @if (totalRevenue() === null) {
           <span class="skeleton-val">...</span>
         } @else {
-          {{ productCount() }}
+          {{ totalRevenue() | currency: 'EGP ' : 'symbol' : '1.0-0' }}
         }
       </div>
       <div class="metric-card__footer">
-        <span>View all inventory</span>
+        <span>Order financials</span>
         <span class="arrow">→</span>
       </div>
     </a>
 
-    <!-- Card 2: Orders -->
+    <!-- Card 1: Orders -->
     <a routerLink="/dashboard/orders" class="metric-card">
       <div class="metric-card__top">
         <span class="metric-card__label">TOTAL ORDERS</span>
@@ -52,7 +52,7 @@
       </div>
     </a>
 
-    <!-- Card 3: Pending Orders -->
+    <!-- Card 2: Pending Orders -->
     <a routerLink="/dashboard/orders" class="metric-card metric-card--highlight">
       <div class="metric-card__top">
         <span class="metric-card__label">PENDING ATTENTION</span>
@@ -71,7 +71,49 @@
       </div>
     </a>
 
-    <!-- Card 4: Users -->
+    <!-- Card 3: Products -->
+    <a routerLink="/dashboard/products" class="metric-card">
+      <div class="metric-card__top">
+        <span class="metric-card__label">PRODUCTS IN CATALOG</span>
+        <span class="metric-card__icon">📦</span>
+      </div>
+      <div class="metric-card__val">
+        @if (productCount() === null) {
+          <span class="skeleton-val">...</span>
+        } @else {
+          {{ productCount() }}
+        }
+      </div>
+      <div class="metric-card__footer">
+        <span>View all inventory</span>
+        <span class="arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Card 4: Testimonials -->
+    <a routerLink="/dashboard/testimonials" class="metric-card" [class.metric-card--highlight]="(pendingTestimonials() ?? 0) > 0">
+      <div class="metric-card__top">
+        <span class="metric-card__label">CUSTOMER REVIEWS</span>
+        <span class="metric-card__icon">💬</span>
+      </div>
+      <div class="metric-card__val">
+        @if (testimonialCount() === null) {
+          <span class="skeleton-val">...</span>
+        } @else {
+          {{ testimonialCount() }}
+        }
+      </div>
+      <div class="metric-card__footer">
+        @if ((pendingTestimonials() ?? 0) > 0) {
+          <span class="highlight-text">{{ pendingTestimonials() }} pending approval</span>
+        } @else {
+          <span>Moderate reviews</span>
+        }
+        <span class="arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Card 5: Users -->
     <a routerLink="/dashboard/users" class="metric-card">
       <div class="metric-card__top">
         <span class="metric-card__label">REGISTERED USERS</span>
@@ -107,6 +149,14 @@
       <p>Inspect customer orders, track payments and delivery addresses, and advance status to Shipped or Delivered.</p>
       <div class="shortcut-box__links">
         <a routerLink="/dashboard/orders" class="text-link">View Order Pipeline ↗</a>
+      </div>
+    </div>
+
+    <div class="shortcut-box">
+      <h2>Customer Testimonials</h2>
+      <p>Moderate user ratings and feedback, approve positive reviews for the homepage, or reject unverified entries.</p>
+      <div class="shortcut-box__links">
+        <a routerLink="/dashboard/testimonials" class="text-link">Moderate Testimonials ↗</a>
       </div>
     </div>
 

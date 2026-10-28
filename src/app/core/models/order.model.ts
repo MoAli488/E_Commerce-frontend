@@ -1,3 +1,6 @@
+import { ICart } from './cart.model';
+import { IUser } from './user.model';
+
 export type OrderStatus =
   | 'pending'
   | 'preparing'
@@ -19,8 +22,8 @@ export interface OrderItem {
 
 export interface Order {
   _id: string;
-  user: string | any; // User ID or populated User object
-  cart: string | any; // Cart ID or populated Cart object
+  user: IUser;
+  cart: ICart;
   orderItems: OrderItem[];
   address: string;
   phone: string;
@@ -29,16 +32,23 @@ export interface Order {
   createdAt?: string | Date;
 }
 
+export interface IOrderRes {
+  message: string;
+  data: Order;
+}
 
-// Helper interface when placing a new order from the frontend
-export interface CreateOrderDto {
-  cart: string;
-  orderItems: {
-    item: string;
-    name: string;
-    quantity: number;
-    unit_price: number;
-  }[];
-  address: string;
-  phone: string;
+export interface IOrderListRes {
+  message: string;
+  data: Order[];
+}
+
+export interface IMakeOrderReq {
+  phone?: string;
+  address?: string;
+  addressId?: string;
+}
+
+export interface IUpdateOrderStatusReq {
+  id: string;
+  status: string;
 }

@@ -18,6 +18,7 @@ import { ProductList as DashboardProductList } from './dashboard/product-list/pr
 import { UserList } from './dashboard/user-list/user-list';
 import { CreateUser } from './dashboard/create-user/create-user';
 import { OrderList } from './dashboard/order-list/order-list';
+import { Testimonial as DashboardTestimonial } from './dashboard/testimonial/testimonial';
 
 import { NotFound } from './shared/not-found/not-found';
 import { authGuard } from './core/guards/auth-guard';
@@ -58,6 +59,7 @@ export const routes: Routes = [
       {
         path: 'orders',
         component: Orders,
+        canActivate: [authGuard],
       },
       { path: 'info/:page', component: InfoPage },
       { path: 'about', redirectTo: 'info/about', pathMatch: 'full' },
@@ -78,6 +80,7 @@ export const routes: Routes = [
       { path: 'orders', component: OrderList },
       { path: 'users', component: UserList },
       { path: 'create-user', component: CreateUser },
+      { path: 'testimonials', component: DashboardTestimonial },
     ],
   },
   { path: '**', component: NotFound },

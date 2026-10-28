@@ -176,7 +176,9 @@ export class CartService {
   }
 
   addGuestCart(data: ICartReq[]) {
-    return this._httpClient.post<ICartRes>(`${this._apiURL}item/guest`, data);
+    return this._httpClient.post<ICartRes>(`${this._apiURL}item/guest`, {
+      cartItems: data,
+    });
   }
 
   updateItem(itemId: string, quantity: number) {

@@ -34,14 +34,14 @@
       >
         All Pieces
       </button>
-      @for (cat of categories(); track cat) {
+      @for (cat of categories(); track cat.slug) {
         <button
           type="button"
           class="pill"
-          [class.pill--active]="selectedCategory() === cat"
-          (click)="selectCategory(cat)"
+          [class.pill--active]="selectedCategory() === cat.slug"
+          (click)="selectCategory(cat.slug)"
         >
-          {{ cat }}
+          {{ cat.name }}
         </button>
       }
     </div>

@@ -1,2 +1,15 @@
 <app-header></app-header>
-<h1>Page Not Found 404</h1>
+<main class="not-found-page">
+  <div class="not-found-container">
+    <span class="eyebrow"><span class="dot"></span> ERROR 404</span>
+    <h1 class="code">404</h1>
+    <h2>This piece seems to be <em>missing.</em></h2>
+    <p class="description">
+      The page you are looking for has been moved, renamed, or might never have existed.
+    </p>
+    <div class="actions">
+      <a routerLink="/home" class="primary-btn">Return to Home <span>↗</span></a>
+      <a routerLink="/product-list" class="secondary-btn">Browse Collection <span>↗</span></a>
+    </div>
+  </div>
+</main>

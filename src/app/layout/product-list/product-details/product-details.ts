@@ -63,7 +63,7 @@ export class ProductDetails implements OnInit {
     this.addedFeedback.set(null);
     this.errorFeedback.set(null);
 
-    if (!this._authService.ifAuthorized('user')) {
+    if (!this._authService.checkIfLoggedIn()) {
       try {
         this._cartService.addGuestCartItem(this.myProduct, this.quantity());
         this.isAdding.set(false);

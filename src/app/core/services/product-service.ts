@@ -27,6 +27,7 @@ export class ProductService {
     limit?: number;
     search?: string;
     category?: string;
+    subCategory?: string;
     minPrice?: number;
     maxPrice?: number;
   }) {
@@ -36,6 +37,7 @@ export class ProductService {
       if (params.limit) httpParams = httpParams.set('limit', params.limit.toString());
       if (params.search) httpParams = httpParams.set('search', params.search);
       if (params.category) httpParams = httpParams.set('category', params.category);
+      if (params.subCategory) httpParams = httpParams.set('subCategory', params.subCategory);
       if (params.minPrice !== undefined) httpParams = httpParams.set('minPrice', params.minPrice.toString());
       if (params.maxPrice !== undefined) httpParams = httpParams.set('maxPrice', params.maxPrice.toString());
     }

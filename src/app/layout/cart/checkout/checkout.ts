@@ -44,6 +44,22 @@ export class Checkout implements OnInit {
   });
 
   ngOnInit(): void {
+    // Dynamically adjust validation based on selected address type
+    this.checkoutForm.controls.addressType.valueChanges.subscribe((type) => {
+      if (type === 'saved') {
+        this.checkoutForm.controls.newAddress.clearValidators();
+        this.checkoutForm.controls.savedAddressId.setValidators([Validators.required]);
+      } else {
+        this.checkoutForm.controls.savedAddressId.clearValidators();
+        this.checkoutForm.controls.newAddress.setValidators([
+          Validators.required,
+          Validators.minLength(5),
+        ]);
+      }
+      this.checkoutForm.controls.newAddress.updateValueAndValidity();
+      this.checkoutForm.controls.savedAddressId.updateValueAndValidity();
+    });
+
     this._cartService.getCart().subscribe({
       next: (res) => {
         this.cart.set(res.data);
@@ -56,7 +72,21 @@ export class Checkout implements OnInit {
     });
 
     this._userService.getAddresses().subscribe({
-      next: (res) => this.addresses.set(res.data || []),
+      next: (res) => {
+        const list = res.data || [];
+        this.addresses.set(list);
+        if (list.length > 0) {
+          const defaultAddr = list.find((a) => a.isDefault) || list[0];
+          this.checkoutForm.patchValue({
+            addressType: 'saved',
+            savedAddressId: defaultAddr._id || '',
+          });
+          this.checkoutForm.controls.newAddress.clearValidators();
+          this.checkoutForm.controls.savedAddressId.setValidators([Validators.required]);
+          this.checkoutForm.controls.newAddress.updateValueAndValidity();
+          this.checkoutForm.controls.savedAddressId.updateValueAndValidity();
+        }
+      },
       error: () => {},
     });
   }
@@ -67,7 +97,7 @@ export class Checkout implements OnInit {
 
   get subtotal(): number {
     return this.cartItems.reduce(
-      (sum, item) => sum + item.item.price * item.quantity,
+      (sum, item) => sum + (item.item?.price || 0) * item.quantity,
       0,
     );
   }

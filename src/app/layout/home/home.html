@@ -21,34 +21,48 @@
     <div><span>♧</span><strong>Free shipping</strong><small>On orders over $75</small></div>
   </section>
 
-  <section class="collection" id="collection">
-    <div class="section-heading">
-      <div><span class="eyebrow">THE GOOD STUFF</span><h2>Pieces you'll <em>live in.</em></h2></div>
-      <a class="text-link" routerLink="/product-list">View all products <span>↗</span></a>
-    </div>
-    <div class="filters">
-      @for(category of categories; track category) {
-        <button [ngClass]="{ 'selected': activeCategory === category.slug }" (click)="doActive(category)">{{category}}</button>
+  @if (displayedProducts.length > 0) {
+    <section class="collection" id="collection">
+      <div class="section-heading">
+        <div><span class="eyebrow">THE GOOD STUFF</span><h2>Pieces you'll <em>live in.</em></h2></div>
+        <a class="text-link" routerLink="/product-list">View all products <span>↗</span></a>
+      </div>
+      @if (categories.length > 1) {
+        <div class="filters">
+          @for(category of categories; track category.slug) {
+            <button
+              [ngClass]="{ 'selected': activeCategory === category.slug }"
+              (click)="doActive(category)"
+            >
+              {{ category.name }}
+            </button>
+          }
+        </div>
       }
-    </div>
-    <div class="product-grid">
-      @for(product of sampleProducts; track product._id) {
-        <article class="product-card">
-          <a class="product-image" routerLink="/product-list">
-            <img [src]="staticURL + (product.imageURL)" [alt]="product.title" loading="lazy">
-            <!-- @if(product.slug) { <span class="product-tag">{{product.slug}}</span> } -->
-            <span class="quick-view">Explore piece ↗</span>
-          </a>
-          <div class="product-meta"><div><h3>{{product.title}}</h3><p>{{product.category}}</p></div><div class="price">${{product.price}}</div></div>
-        </article>
-      }
-    </div>
-  </section>
+      <div class="product-grid">
+        @for(product of displayedProducts; track product._id) {
+          <article class="product-card">
+            <a class="product-image" [routerLink]="['/product-details', product.slug]">
+              <img [src]="staticURL + (product.imageURL)" [alt]="product.title" loading="lazy">
+              <span class="quick-view">Explore piece ↗</span>
+            </a>
+            <div class="product-meta">
+              <div>
+                <h3>{{ product.title }}</h3>
+                <p>{{ product.category?.name || 'Everyday' }}</p>
+              </div>
+              <div class="price">${{ product.price }}</div>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  }
+
   <section class="manifesto">
     <div class="manifesto-image"><img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=85" alt="Contemporary street style"></div>
     <div class="manifesto-copy"><span class="eyebrow">LESS, BUT BETTER</span><h2>Good clothes.<br><em>Good days.</em></h2><p>We believe getting dressed should feel easy. That's why we focus on timeless shapes, considered details, and the little things that make a piece feel just right.</p><a routerLink="/product-list" class="text-link">Find your everyday uniform ↗</a></div>
   </section>
-  <!-- <section class="newsletter"><span class="eyebrow">A LITTLE NOTE FROM US</span><h2>Good things land<br>in your <em>inbox.</em></h2><p>First looks, fresh drops, and 10% off your first order.</p><form (submit)="$event.preventDefault(); subscribed = true"><input type="email" placeholder="Your email address" aria-label="Your email address" required><button type="submit">Join us ↗</button></form>@if(subscribed){<small class="success">You're on the list. Welcome aboard!</small>}</section> -->
 
   <!-- Customer Testimonials Section -->
   <app-testimonial></app-testimonial>

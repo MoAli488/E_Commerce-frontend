@@ -2,7 +2,7 @@ import { IProduct } from './product.model';
 
 export interface ICartItem {
   _id: string;
-  cart: string; // cartId
+  cart: string;
   item: IProduct;
   oldPrice?: number;
   quantity: number;

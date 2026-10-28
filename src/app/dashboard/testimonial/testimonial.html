@@ -1,1 +1,242 @@
-<p>testimonial works!</p>
+<div class="dash-section">
+  <!-- Section Header -->
+  <div class="dash-section__head">
+    <div>
+      <span class="eyebrow">FEEDBACK MODERATION</span>
+      <h2>Customer Testimonials</h2>
+      <p class="section-desc">
+        Review customer feedback. Approved testimonials appear publicly on the storefront homepage.
+      </p>
+    </div>
+    <button class="btn-refresh" (click)="loadTestimonials()" [disabled]="isLoading()">
+      ↻ Refresh
+    </button>
+  </div>
+
+  <!-- Alert Notifications -->
+  @if (successMsg()) {
+    <div class="alert alert--success">{{ successMsg() }}</div>
+  }
+
+  @if (error()) {
+    <div class="alert alert--error">{{ error() }}</div>
+  }
+
+  <!-- Review Statistics Grid -->
+  <div class="testimonial-stats">
+    <div class="stat-card">
+      <span class="stat-card__label">TOTAL REVIEWS</span>
+      <span class="stat-card__val">{{ totalCount }}</span>
+    </div>
+
+    <div
+      class="stat-card stat-card--pending"
+      [class.stat-card--attention]="pendingCount > 0"
+      (click)="statusFilter.set('pending')"
+    >
+      <span class="stat-card__label">PENDING APPROVAL</span>
+      <span class="stat-card__val">{{ pendingCount }}</span>
+      @if (pendingCount > 0) {
+        <span class="stat-badge">Needs Action</span>
+      }
+    </div>
+
+    <div class="stat-card" (click)="statusFilter.set('approved')">
+      <span class="stat-card__label">LIVE & APPROVED</span>
+      <span class="stat-card__val">{{ approvedCount }}</span>
+    </div>
+
+    <div class="stat-card" (click)="statusFilter.set('rejected')">
+      <span class="stat-card__label">REJECTED</span>
+      <span class="stat-card__val">{{ rejectedCount }}</span>
+    </div>
+
+    <div class="stat-card stat-card--rating">
+      <span class="stat-card__label">AVERAGE RATING</span>
+      <div class="rating-display">
+        <span class="stat-card__val">{{ averageRating }}</span>
+        <span class="rating-star">★</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls Toolbar -->
+  <div class="dash-toolbar">
+    <div class="search-wrap">
+      <input
+        type="search"
+        placeholder="Search reviews by customer name, email, subject, or comment..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+      />
+    </div>
+
+    <div class="filter-wrap">
+      <label for="statusFilter">Status:</label>
+      <select
+        id="statusFilter"
+        [ngModel]="statusFilter()"
+        (ngModelChange)="statusFilter.set($event)"
+      >
+        <option value="all">All Statuses ({{ totalCount }})</option>
+        <option value="pending">Pending ({{ pendingCount }})</option>
+        <option value="approved">Approved ({{ approvedCount }})</option>
+        <option value="rejected">Rejected ({{ rejectedCount }})</option>
+      </select>
+    </div>
+
+    <div class="filter-wrap">
+      <label for="rateFilter">Rating:</label>
+      <select
+        id="rateFilter"
+        [ngModel]="rateFilter()"
+        (ngModelChange)="rateFilter.set($event)"
+      >
+        <option value="all">All Stars</option>
+        <option value="5">5 Stars ★★★★★</option>
+        <option value="4">4 Stars ★★★★☆</option>
+        <option value="3">3 Stars ★★★☆☆</option>
+        <option value="2">2 Stars ★★☆☆☆</option>
+        <option value="1">1 Star ★☆☆☆☆</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Main Content State -->
+  @if (isLoading()) {
+    <div class="dash-loading">
+      <div class="spinner"></div>
+      <p>Loading customer testimonials...</p>
+    </div>
+  } @else if (filteredTestimonials.length === 0) {
+    <div class="dash-empty">
+      <div class="empty-icon">💬</div>
+      <h3>No testimonials found</h3>
+      <p>
+        @if (searchTerm() || statusFilter() !== 'all' || rateFilter() !== 'all') {
+          No reviews match the selected filter criteria.
+        } @else {
+          No customer reviews have been submitted yet.
+        }
+      </p>
+      @if (searchTerm() || statusFilter() !== 'all' || rateFilter() !== 'all') {
+        <button
+          class="btn-reset"
+          (click)="searchTerm.set(''); statusFilter.set('all'); rateFilter.set('all')"
+        >
+          Reset Filters
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="testimonials-table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Rating</th>
+            <th>Review Content</th>
+            <th>Submitted</th>
+            <th>Status</th>
+            <th class="th-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredTestimonials; track item._id) {
+            <tr [class.row-pending]="item.status === 'pending'">
+              <!-- Customer Profile -->
+              <td class="td-customer">
+                <div class="customer-info">
+                  <div class="customer-avatar">
+                    {{ (item.user.name || 'U').slice(0, 1).toUpperCase() }}
+                  </div>
+                  <div>
+                    <strong class="customer-name">{{ item.user.name || 'Anonymous' }}</strong>
+                    <span class="customer-email">{{ item.user.email }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Rating Stars -->
+              <td class="td-rating">
+                <div class="stars" [title]="item.rate + ' out of 5 stars'">
+                  @for (filled of getStarArray(item.rate); track $index) {
+                    <span [class.star-filled]="filled" [class.star-empty]="!filled">★</span>
+                  }
+                  <span class="numeric-rate">{{ item.rate }}.0</span>
+                </div>
+              </td>
+
+              <!-- Subject & Comment -->
+              <td class="td-content">
+                @if (item.subject) {
+                  <div class="review-subject">{{ item.subject }}</div>
+                }
+                <div class="review-comment">"{{ item.comment }}"</div>
+              </td>
+
+              <!-- Submission Date -->
+              <td class="td-date">
+                {{ (item.createdAt || item.date) | date: 'mediumDate' }}
+              </td>
+
+              <!-- Status Badge -->
+              <td class="td-status">
+                <span [class]="getStatusClass(item.status)">
+                  {{ item.status | titlecase }}
+                </span>
+              </td>
+
+              <!-- Actions -->
+              <td class="td-actions">
+                <div class="action-buttons">
+                  @if (item.status !== 'approved') {
+                    <button
+                      class="btn-action btn-action--approve"
+                      title="Approve and publish to storefront"
+                      [disabled]="updatingId() === item._id || deletingId() === item._id"
+                      (click)="updateStatus(item, 'approved')"
+                    >
+                      ✓ Approve
+                    </button>
+                  }
+
+                  @if (item.status !== 'rejected') {
+                    <button
+                      class="btn-action btn-action--reject"
+                      title="Reject review"
+                      [disabled]="updatingId() === item._id || deletingId() === item._id"
+                      (click)="updateStatus(item, 'rejected')"
+                    >
+                      ✕ Reject
+                    </button>
+                  }
+
+                  @if (item.status !== 'pending') {
+                    <button
+                      class="btn-action btn-action--pending"
+                      title="Mark as pending review"
+                      [disabled]="updatingId() === item._id || deletingId() === item._id"
+                      (click)="updateStatus(item, 'pending')"
+                    >
+                      ↩ Pending
+                    </button>
+                  }
+
+                  <button
+                    class="btn-action btn-action--delete"
+                    title="Permanently delete review"
+                    [disabled]="updatingId() === item._id || deletingId() === item._id"
+                    (click)="deleteTestimonial(item)"
+                  >
+                    🗑
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

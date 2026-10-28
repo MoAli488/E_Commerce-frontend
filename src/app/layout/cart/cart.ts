@@ -16,8 +16,7 @@ export class Cart implements OnInit, OnDestroy {
   private _cartService = inject(CartService);
   private _authService = inject(AuthService);
 
-  // guestCart: ICartItem[] = [];
-  loggedIn: boolean = this._authService.ifAuthorized('user');
+  loggedIn: boolean = this._authService.checkIfLoggedIn();
   cart!: ICart;
   isLoading = signal(true);
   error = signal<string | null>(null);
@@ -35,7 +34,7 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   loadCart() {
-    if (!this._authService.ifAuthorized('user')) {
+    if (!this._authService.checkIfLoggedIn()) {
       this.loggedIn = false;
       this.cart = this._cartService.getGuestCart() || {
         _id: 'guest',
@@ -65,7 +64,7 @@ export class Cart implements OnInit, OnDestroy {
 
   get subtotal(): number {
     return this.cartItems.reduce(
-      (sum, item) => sum + item.item.price * item.quantity,
+      (sum, item) => sum + (item.item?.price || 0) * item.quantity,
       0,
     );
   }

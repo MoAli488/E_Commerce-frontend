@@ -30,6 +30,20 @@ export class AuthService {
     return null;
   }
 
+  private getReturnUrl(): string | null {
+    try {
+      const currentUrl = this._router.url;
+      const urlTree = this._router.parseUrl(currentUrl);
+      return (
+        urlTree.queryParams['returnUrl'] ||
+        urlTree.queryParams['returnURL'] ||
+        null
+      );
+    } catch {
+      return null;
+    }
+  }
+
   login(data: ILoginReq) {
     return this._httpClient.post<ILoginRes>(this._apiURL + 'login', data).pipe(
       tap((res) => {
@@ -38,9 +52,14 @@ export class AuthService {
           if (userInfo) {
             this.saveToken(res.token);
             this.userData.next(userInfo);
-            if (userInfo.role === 'admin')
+            const returnUrl = this.getReturnUrl();
+            if (returnUrl) {
+              this._router.navigateByUrl(returnUrl);
+            } else if (userInfo.role === 'admin') {
               this._router.navigate(['/dashboard']);
-            else this._router.navigate(['/']);
+            } else {
+              this._router.navigate(['/']);
+            }
           }
         }
       }),
@@ -54,7 +73,12 @@ export class AuthService {
         if (!decode) return alert('Something went wrong!');
         this.saveToken(res.token);
         this.userData.next(decode);
-        return this._router.navigate(['/']);
+        const returnUrl = this.getReturnUrl();
+        if (returnUrl) {
+          this._router.navigateByUrl(returnUrl);
+        } else {
+          this._router.navigate(['/']);
+        }
       }),
     );
   }
@@ -62,7 +86,6 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     this.userData.next(null);
-    // this._router.navigate(['/']);
   }
 
   checkIfLoggedIn(): boolean {

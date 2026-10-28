@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 import { IToken } from '../../../core/models/auth.model';
 import { TitleCasePipe } from '@angular/common';
@@ -13,9 +13,11 @@ import { TitleCasePipe } from '@angular/common';
 export class Header implements OnInit {
   private _authService = inject(AuthService);
   private _cdr = inject(ChangeDetectorRef);
+  private _router = inject(Router);
   userData!: IToken | null;
   logout() {
     this._authService.logout();
+    this._router.navigate(['/']);
   }
   ngOnInit(): void {
     this._authService.getUserData().subscribe({

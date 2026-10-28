@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/c
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product-service';
 import { IProduct } from '../../core/models/product.model';
+import { ICategory } from '../../core/models/category.model';
 import { enviroment } from '../../../../enviroment/env';
 import { Product } from './product/product';
 
@@ -16,7 +17,7 @@ export class ProductList implements OnInit {
   private _cdr = inject(ChangeDetectorRef);
 
   products = signal<IProduct[]>([]);
-  categories = signal<string[]>([]);
+  categories = signal<ICategory[]>([]);
   selectedCategory = signal<string>('all');
   searchQuery = signal<string>('');
   selectedPriceRange = signal<string>('all');
@@ -76,11 +77,13 @@ export class ProductList implements OnInit {
 
         // Extract categories if list is empty
         if (this.categories().length === 0 && res.data.length > 0) {
-          const cats = new Set<string>();
+          const catMap = new Map<string, ICategory>();
           res.data.forEach((p) => {
-            if (p.category?.name) cats.add(p.category.name);
+            if (p.category?.slug) {
+              catMap.set(p.category.slug, p.category);
+            }
           });
-          this.categories.set(Array.from(cats));
+          this.categories.set(Array.from(catMap.values()));
         }
 
         this.loading.set(false);

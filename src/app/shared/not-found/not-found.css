@@ -1,0 +1,133 @@
+:host {
+  display: block;
+}
+
+.not-found-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 5.5% 100px;
+  background: #fbfaf6;
+}
+
+.not-found-container {
+  max-width: 560px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2.2px;
+  font-weight: 700;
+  color: #73796e;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: #c56b4b;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.code {
+  font-size: clamp(80px, 14vw, 140px);
+  line-height: 0.95;
+  letter-spacing: -6px;
+  font-weight: 600;
+  color: #e5e2da;
+  margin: 16px 0 12px;
+}
+
+h2 {
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: -1.2px;
+  line-height: 1.15;
+  font-weight: 500;
+  color: #20241f;
+  margin: 0 0 16px;
+}
+
+h2 em {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  color: #a45d42;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #777d73;
+  margin: 0 auto 36px;
+  max-width: 440px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  background: #252b24;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 14px 24px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.primary-btn span {
+  font-size: 15px;
+}
+
+.primary-btn:hover {
+  background: #a45d42;
+  transform: translateY(-1px);
+}
+
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  background: transparent;
+  color: #252b24;
+  text-decoration: none;
+  padding: 13px 22px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #d8d6ce;
+  transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+  border-color: #252b24;
+  background: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}
+
