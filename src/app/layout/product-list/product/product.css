@@ -1,1 +1,88 @@
-:host{display:block;min-width:0}.product-tile{display:block;color:#272c25;text-decoration:none}.tile-image{position:relative;aspect-ratio:3/4;background:#eeeee7;overflow:hidden}.tile-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}.product-tile:hover img{transform:scale(1.035)}.tile-action{position:absolute;bottom:12px;left:12px;right:12px;text-align:center;background:#fbfaf6;padding:12px;font-size:10px;opacity:0;transition:opacity .2s}.product-tile:hover .tile-action{opacity:1}.tile-info{padding:14px 0}.tile-info h3{font-size:13px;font-weight:600;margin:0 0 7px}.tile-info span{font-size:10px;color:#858a80}
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.product-tile {
+  display: block;
+  color: #272c25;
+  text-decoration: none;
+}
+
+.tile-image {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: #eeeee7;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.tile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.product-tile:hover img {
+  transform: scale(1.04);
+}
+
+.tile-action {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  text-align: center;
+  background: #fbfaf6;
+  padding: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(4px);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.product-tile:hover .tile-action {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tile-info {
+  padding: 12px 0 6px;
+}
+
+.tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tile-header h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  color: #232723;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tile-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f221f;
+  white-space: nowrap;
+}
+
+.tile-category {
+  font-size: 11px;
+  color: #83887d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

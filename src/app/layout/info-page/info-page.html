@@ -1,0 +1,239 @@
+<section class="info-page">
+  <div class="info-container">
+    <!-- Navigation Tabs -->
+    <nav class="info-nav" aria-label="Information sections">
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'about'"
+        (click)="setTab('about')"
+      >
+        About Us
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'contact'"
+        (click)="setTab('contact')"
+      >
+        Contact Us
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'faq'"
+        (click)="setTab('faq')"
+      >
+        FAQ
+      </button>
+      <button
+        type="button"
+        class="tab-btn"
+        [class.tab-btn--active]="activeTab() === 'policies'"
+        (click)="setTab('policies')"
+      >
+        Policies & Terms
+      </button>
+    </nav>
+
+    <!-- TAB 1: About Us -->
+    @if (activeTab() === 'about') {
+      <article class="content-block">
+        <header class="block-header">
+          <span class="eyebrow">OUR PHILOSOPHY</span>
+          <h1>Considered Design.<br /><em>Made for Life.</em></h1>
+          <p class="lead">
+            We believe the things you wear and use daily should be intentional, durable, and understated.
+          </p>
+        </header>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <h3>Less, But Better</h3>
+            <p>
+              Rather than chasing ephemeral trends, our catalog focuses on timeless essentials built with honest materials and refined proportions.
+            </p>
+          </div>
+          <div class="about-card">
+            <h3>Ethical Sourcing</h3>
+            <p>
+              We partner closely with certified mills and craftsmen who prioritize safe working conditions and sustainable manufacturing standards.
+            </p>
+          </div>
+          <div class="about-card">
+            <h3>Transparent Pricing</h3>
+            <p>
+              Direct-to-consumer delivery means no unnecessary retail markups, ensuring premium quality at fair, straightforward prices.
+            </p>
+          </div>
+        </div>
+      </article>
+    }
+
+    <!-- TAB 2: Contact Us -->
+    @if (activeTab() === 'contact') {
+      <article class="content-block">
+        <header class="block-header">
+          <span class="eyebrow">GET IN TOUCH</span>
+          <h1>We're here to help.<br /><em>Drop us a line.</em></h1>
+          <p class="lead">
+            Questions about our sizing, order status, or delivery? Our dedicated concierge is available Sunday through Thursday.
+          </p>
+        </header>
+
+        <div class="contact-grid">
+          <div class="contact-details">
+            <div class="contact-item">
+              <strong>Support Email</strong>
+              <p>concierge&#64;form-store.com</p>
+            </div>
+            <div class="contact-item">
+              <strong>Customer Care Hotline</strong>
+              <p>+20 (0) 100 123 4567</p>
+            </div>
+            <div class="contact-item">
+              <strong>Showroom & Headquarters</strong>
+              <p>23 Al-Gezira St., Zamalek, Cairo, Egypt</p>
+            </div>
+            <div class="contact-item">
+              <strong>Working Hours</strong>
+              <p>Sun – Thu: 9:00 AM – 6:00 PM (EET)</p>
+            </div>
+          </div>
+
+          <div class="contact-form-wrap">
+            @if (contactSent()) {
+              <div class="alert alert--success">
+                Thank you! Your message has been received. Our team will get back to you within 24 hours.
+              </div>
+            } @else {
+              <form (ngSubmit)="submitContact()" class="contact-form">
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="contact-name">Name</label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      required
+                      [(ngModel)]="contactForm.name"
+                      name="name"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div class="form-field">
+                    <label for="contact-email">Email</label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      required
+                      [(ngModel)]="contactForm.email"
+                      name="email"
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label for="contact-subj">Subject</label>
+                  <input
+                    id="contact-subj"
+                    type="text"
+                    [(ngModel)]="contactForm.subject"
+                    name="subject"
+                    placeholder="e.g. Order Inquiry, Sizing Guide"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="contact-msg">Message</label>
+                  <textarea
+                    id="contact-msg"
+                    rows="4"
+                    required
+                    [(ngModel)]="contactForm.message"
+                    name="message"
+                    placeholder="How can we assist you today?"
+                  ></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                  Send Message ↗
+                </button>
+              </form>
+            }
+          </div>
+        </div>
+      </article>
+    }
+
+    <!-- TAB 3: FAQ -->
+    @if (activeTab() === 'faq') {
+      <article class="content-block">
+        <header class="block-header">
+          <span class="eyebrow">HELP CENTER</span>
+          <h1>Frequently Asked<br /><em>Questions.</em></h1>
+        </header>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <h3>How long does standard delivery take?</h3>
+            <p>
+              Domestic orders typically arrive within 2–4 business days. You will receive real-time notifications in your account under "My Orders".
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>What is your return and exchange window?</h3>
+            <p>
+              We gladly accept returns of unworn, unwashed items with tags attached within 30 days of receiving your package.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>How do I cancel or modify an existing order?</h3>
+            <p>
+              You may cancel an order directly while it remains in "pending" status from your Account page. Once in "preparing" or "shipped", please reach out to customer support.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h3>What payment methods are supported?</h3>
+            <p>
+              We support Cash on Delivery (COD) as well as all major credit/debit cards during checkout.
+            </p>
+          </div>
+        </div>
+      </article>
+    }
+
+    <!-- TAB 4: Policies -->
+    @if (activeTab() === 'policies') {
+      <article class="content-block">
+        <header class="block-header">
+          <span class="eyebrow">LEGAL & TERMS</span>
+          <h1>Store Policies &<br /><em>Terms of Service.</em></h1>
+        </header>
+
+        <div class="policies-body">
+          <section class="policy-section">
+            <h3>1. Privacy & Data Protection</h3>
+            <p>
+              We respect your privacy. Personal data collected during registration, ordering, and address management is strictly encrypted and used solely for fulfilling orders and improving your customer experience.
+            </p>
+          </section>
+
+          <section class="policy-section">
+            <h3>2. Shipping & Fulfilment Terms</h3>
+            <p>
+              All shipments are inspected prior to dispatch. If a package arrives damaged or missing items, notify our care team within 48 hours for immediate replacement or refund.
+            </p>
+          </section>
+
+          <section class="policy-section">
+            <h3>3. Refund & Order Cancellation Guidelines</h3>
+            <p>
+              Orders cancelled prior to dispatch receive full refunds. Once delivered, approved returns are refunded back to the original method of payment or store credit within 5-7 business days.
+            </p>
+          </section>
+        </div>
+      </article>
+    }
+  </div>
+</section>

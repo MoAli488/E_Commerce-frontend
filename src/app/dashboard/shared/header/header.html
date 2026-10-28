@@ -18,7 +18,9 @@
         >
         <button class="logout-btn" (click)="logout()">Log out</button>
       } @else {
-        <a class="account-link" routerLink="/login">Log in</a>
+        <a class="account-link" routerLink="/login" routerLinkActive="active"
+          >Log in</a
+        >
         <a class="bag-link" routerLink="/signup">Sign up <span>↗</span></a>
       }
     </div>

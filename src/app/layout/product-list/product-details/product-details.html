@@ -1,6 +1,20 @@
 @if (myProduct) {
   <main class="detail-page">
     <a class="back-link" routerLink="/product-list">← Back to shop</a>
+
+    @if (addedFeedback()) {
+      <div class="feedback-banner feedback-banner--success">
+        <span>{{ addedFeedback() }}</span>
+        <a routerLink="/cart" class="feedback-link">View Bag ↗</a>
+      </div>
+    }
+
+    @if (errorFeedback()) {
+      <div class="feedback-banner feedback-banner--error">
+        <span>{{ errorFeedback() }}</span>
+      </div>
+    }
+
     <section class="detail-grid">
       <div class="detail-image">
         <img [src]="staticURL + myProduct.imageURL" [alt]="myProduct.title" />
@@ -27,19 +41,52 @@
             } @else if (myProduct.stock <= 3) {
               Only {{ myProduct.stock }} left in stock
             } @else {
-              In stock
+              In stock ({{ myProduct.stock }} available)
             }
           </span>
         </div>
+
+        @if (myProduct.stock > 0) {
+          <!-- Quantity Selector -->
+          <div class="quantity-row">
+            <span class="qty-label">Quantity:</span>
+            <div class="qty-selector">
+              <button
+                type="button"
+                class="qty-btn"
+                [disabled]="quantity() <= 1 || isAdding()"
+                (click)="decrementQty()"
+              >
+                −
+              </button>
+              <span class="qty-value">{{ quantity() }}</span>
+              <button
+                type="button"
+                class="qty-btn"
+                [disabled]="quantity() >= myProduct.stock || isAdding()"
+                (click)="incrementQty()"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        }
+
         <button
           class="add-button"
           type="button"
-          [disabled]="myProduct.stock <= 0"
+          [disabled]="myProduct.stock <= 0 || isAdding()"
           (click)="addToCart()"
         >
-          {{ myProduct.stock > 0 ? 'Add to bag' : 'Out of stock' }}
-          <span>↗</span>
+          @if (isAdding()) {
+            Adding to bag...
+          } @else if (myProduct.stock <= 0) {
+            Out of stock
+          } @else {
+            Add to bag ({{ quantity() }}) <span>↗</span>
+          }
         </button>
+
         <p class="detail-note">
           Free shipping on orders over $75. Easy returns within 30 days.
         </p>

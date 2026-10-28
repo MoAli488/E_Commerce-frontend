@@ -24,6 +24,7 @@ export interface IProductReq {
 
 export interface IProductsListRes {
   message: string;
+  totalPages?: number;
   data: IProduct[];
 }
 

@@ -1,1 +1,107 @@
-<p>create-user works!</p>
+<section class="create-page">
+  <div class="create-header">
+    <div class="header-titles">
+      <span class="eyebrow">ADMIN DASHBOARD</span>
+      <h1>Create <em>user.</em></h1>
+      <p>Add a new user account with a name, email, password, and role.</p>
+    </div>
+    <a routerLink="/dashboard/users" class="back-link">← Back to users</a>
+  </div>
+
+  @if (statusMessage()) {
+    <div
+      class="status-alert"
+      [class.status-success]="statusMessage()!.type === 'success'"
+      [class.status-error]="statusMessage()!.type === 'error'"
+    >
+      <span>{{ statusMessage()!.type === 'success' ? '✓' : '!' }}</span>
+      <p>{{ statusMessage()!.text }}</p>
+    </div>
+  }
+
+  <form
+    [formGroup]="userForm"
+    (ngSubmit)="onSubmit()"
+    class="product-form"
+    novalidate
+  >
+    <div class="form-card details-card">
+      <h2 class="card-title">User Information</h2>
+
+      <div class="field">
+        <label for="user-name">Full Name *</label>
+        <input
+          id="user-name"
+          type="text"
+          formControlName="name"
+          placeholder="e.g. Mohamed Ahmed"
+          [class.input-error]="
+            userForm.get('name')?.invalid && userForm.get('name')?.touched
+          "
+        />
+        @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
+          <small class="field-error">Name must be at least 2 characters.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="user-email">Email Address *</label>
+        <input
+          id="user-email"
+          type="email"
+          formControlName="email"
+          placeholder="e.g. user@example.com"
+          [class.input-error]="
+            userForm.get('email')?.invalid && userForm.get('email')?.touched
+          "
+        />
+        @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+          <small class="field-error">Enter a valid email address.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="user-password">Password *</label>
+        <input
+          id="user-password"
+          type="password"
+          formControlName="password"
+          placeholder="At least 8 characters"
+          [class.input-error]="
+            userForm.get('password')?.invalid &&
+            userForm.get('password')?.touched
+          "
+        />
+        @if (
+          userForm.get('password')?.invalid && userForm.get('password')?.touched
+        ) {
+          <small class="field-error"
+            >Password must be at least 8 characters.</small
+          >
+        }
+      </div>
+
+      <div class="field">
+        <label for="user-role">Role</label>
+        <select id="user-role" formControlName="role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        [disabled]="isSubmitting() || userForm.invalid"
+        [ngClass]="{
+          'submit-btn': !userForm.invalid && !isSubmitting(),
+          'disable-submit-btn': userForm.invalid || isSubmitting(),
+        }"
+      >
+        <span>{{ isSubmitting() ? 'Creating user…' : 'Create user' }}</span>
+        <span class="arrow">↗</span>
+      </button>
+    </div>
+  </form>
+</section>

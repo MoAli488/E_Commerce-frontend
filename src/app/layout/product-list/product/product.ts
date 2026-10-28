@@ -10,6 +10,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './product.html',
 })
 export class Product {
-  private staticURL = enviroment.staticURL;
+  staticURL = enviroment.staticURL;
   @Input() myProduct!: IProduct;
 }

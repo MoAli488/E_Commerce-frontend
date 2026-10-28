@@ -9,8 +9,12 @@
     <nav aria-label="Main navigation">
       <a routerLink="/home" routerLinkActive="active">Home</a>
       <a routerLink="/product-list" routerLinkActive="active">Shop all</a>
+      <a routerLink="/cart" routerLinkActive="active">Cart</a>
       @if (userData) {
-        <a routerLink="/cart" routerLinkActive="active">Cart</a>
+        <a routerLink="/orders" routerLinkActive="active">Orders</a>
+      }
+      @if (userData?.role === 'admin') {
+        <a routerLink="/dashboard" class="nav-dashboard">Dashboard ↗</a>
       }
     </nav>
     <div class="nav-actions">
@@ -20,7 +24,7 @@
         >
         <button class="logout-btn" (click)="logout()">Log out</button>
       } @else {
-        <a class="account-link" routerLink="/login">Log in</a>
+        <a class="account-link" routerLink="/login" routerLinkActive="active">Log in</a>
         <a class="bag-link" routerLink="/signup">Sign up <span>↗</span></a>
       }
     </div>

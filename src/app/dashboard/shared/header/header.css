@@ -56,7 +56,8 @@
 
 .nav-wrap nav a:hover,
 .nav-wrap nav a.active,
-.account-link:hover {
+.account-link:hover,
+.account-link.active {
   color: #a45d42;
 }
 

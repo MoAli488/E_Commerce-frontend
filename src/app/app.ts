@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './shared/footer/footer';
 import { AuthService } from './core/services/auth-service';
+import { CartService } from './core/services/cart-service';
 
 @Component({
   imports: [RouterOutlet, Footer],
@@ -12,7 +13,10 @@ import { AuthService } from './core/services/auth-service';
 export class App implements OnInit {
   protected readonly title = signal('frontend');
   private _authService = inject(AuthService);
+  private _cartService = inject(CartService);
   ngOnInit(): void {
-    this._authService.checkIfLoggedIn();
+    if (!this._authService.ifAuthorized('user'))
+      return this._authService.logout();
+    this._cartService.mergeCart();
   }
 }

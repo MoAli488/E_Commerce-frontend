@@ -1,29 +1,222 @@
 <main class="profile-page">
   <section class="profile-heading">
-    <span class="eyebrow">YOUR FORM / PROFILE</span>
+    <span class="eyebrow">ACCOUNT DASHBOARD</span>
     <h1>
-      Welcome home,<br /><em>{{ user.name | titlecase }}.</em>
+      Welcome back,<br />
+      <em>{{ user()?.name | titlecase }}.</em>
     </h1>
-    <p>Your account is the easy way to keep the good stuff close.</p>
+    <p>Manage your personal details, delivery addresses, and past orders.</p>
   </section>
 
-  <section class="profile-grid">
-    <article class="profile-card profile-card--dark">
-      <span class="card-label">ACCOUNT DETAILS</span>
-      <!-- <div class="profile-initial">{{ user.name | titlecase }}</div> -->
-      <h2>{{ user.name }}</h2>
-      <p>Your account is ready for whatever comes next.</p>
-      <span class="member-note">FORM member</span>
-    </article>
-    <article class="profile-card">
-      <span class="card-label">YOUR NEXT MOVE</span>
-      <h2>Find something<br /><em>you'll live in.</em></h2>
-      <p>
-        Explore considered essentials, made for wherever your day takes you.
-      </p>
-      <a class="profile-link" routerLink="/product-list"
-        >Shop the collection <span>↗</span></a
-      >
-    </article>
-  </section>
+  @if (successMsg()) {
+    <div class="alert alert--success">{{ successMsg() }}</div>
+  }
+  @if (errorMsg()) {
+    <div class="alert alert--error">{{ errorMsg() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="profile-loading">
+      <p>Loading profile information...</p>
+    </div>
+  } @else {
+    <div class="profile-layout-grid">
+      <!-- Left Column: Personal Information -->
+      <section class="profile-box">
+        <div class="box-head">
+          <div>
+            <span class="box-tag">ACCOUNT PROFILE</span>
+            <h2>Personal Information</h2>
+          </div>
+          <button class="btn-action-text" (click)="toggleEditProfile()">
+            {{ isEditingProfile() ? 'Cancel' : 'Edit Details' }}
+          </button>
+        </div>
+
+        @if (!isEditingProfile()) {
+          <dl class="info-list">
+            <div class="info-item">
+              <dt>Full Name</dt>
+              <dd>{{ user()?.name }}</dd>
+            </div>
+            <div class="info-item">
+              <dt>Email Address</dt>
+              <dd>{{ user()?.email }}</dd>
+            </div>
+            <div class="info-item">
+              <dt>Phone Number</dt>
+              <dd>{{ user()?.phone || 'No phone added yet' }}</dd>
+            </div>
+            <div class="info-item">
+              <dt>Account Role</dt>
+              <dd>
+                <span class="role-badge" [ngClass]="'role--' + user()?.role">
+                  {{ user()?.role | titlecase }}
+                </span>
+              </dd>
+            </div>
+          </dl>
+        } @else {
+          <!-- Edit Form -->
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="edit-form">
+            <div class="form-group">
+              <label for="prof-name">Full Name</label>
+              <input
+                id="prof-name"
+                type="text"
+                formControlName="name"
+                placeholder="Your full name"
+              />
+              @if (profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+                <span class="field-err">Name is required (at least 2 characters).</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="prof-phone">Phone Number (Egyptian format: 01xxxxxxxxx)</label>
+              <input
+                id="prof-phone"
+                type="tel"
+                formControlName="phone"
+                placeholder="e.g. 01012345678"
+              />
+              @if (profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched) {
+                <span class="field-err">Must be a valid 11-digit Egyptian phone number.</span>
+              }
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save" [disabled]="isSaving()">
+                {{ isSaving() ? 'Saving...' : 'Save Changes' }}
+              </button>
+              <button type="button" class="btn-cancel" (click)="toggleEditProfile()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        }
+
+        <!-- Quick Links in Box -->
+        <div class="profile-shortcuts">
+          <a routerLink="/orders" class="shortcut-pill">
+            <span>📦 My Orders</span>
+            <span class="arrow">→</span>
+          </a>
+          <a routerLink="/cart" class="shortcut-pill">
+            <span>🛒 Shopping Cart</span>
+            <span class="arrow">→</span>
+          </a>
+          @if (user()?.role === 'admin') {
+            <a routerLink="/dashboard" class="shortcut-pill shortcut-pill--admin">
+              <span>⚙ Admin Dashboard</span>
+              <span class="arrow">→</span>
+            </a>
+          }
+        </div>
+      </section>
+
+      <!-- Right Column: Delivery Addresses -->
+      <section class="profile-box">
+        <div class="box-head">
+          <div>
+            <span class="box-tag">SHIPPING BOOK</span>
+            <h2>Delivery Addresses</h2>
+          </div>
+          <button class="btn-action-text" (click)="toggleAddAddress()">
+            {{ isAddingAddress() ? 'Cancel' : '+ Add Address' }}
+          </button>
+        </div>
+
+        @if (isAddingAddress()) {
+          <!-- Add Address Form -->
+          <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="edit-form address-add-box">
+            <h3>Add New Address</h3>
+
+            <div class="form-group">
+              <label for="addr-title">Label / Nickname</label>
+              <input
+                id="addr-title"
+                type="text"
+                formControlName="title"
+                placeholder="e.g. Home, Office, Summer House"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="addr-loc">Full Address & Street Details</label>
+              <input
+                id="addr-loc"
+                type="text"
+                formControlName="location"
+                placeholder="Building, street, apartment, city"
+              />
+              @if (addressForm.get('location')?.invalid && addressForm.get('location')?.touched) {
+                <span class="field-err">Address location is required.</span>
+              }
+            </div>
+
+            <div class="checkbox-group">
+              <label>
+                <input type="checkbox" formControlName="isDefault" />
+                <span>Make this my default delivery address</span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save" [disabled]="isSaving()">
+                {{ isSaving() ? 'Saving...' : 'Add Address' }}
+              </button>
+              <button type="button" class="btn-cancel" (click)="toggleAddAddress()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        }
+
+        <!-- Addresses List -->
+        @if (addresses().length === 0 && !isAddingAddress()) {
+          <div class="empty-addresses">
+            <p>No delivery addresses saved yet.</p>
+            <button class="btn-add-first" (click)="toggleAddAddress()">
+              + Add your first address
+            </button>
+          </div>
+        } @else {
+          <div class="addresses-list">
+            @for (addr of addresses(); track addr._id) {
+              <div class="address-card" [class.address-card--default]="addr.isDefault">
+                <div class="address-card__top">
+                  <div class="addr-title-wrap">
+                    <strong>{{ addr.title || 'Address' }}</strong>
+                    @if (addr.isDefault) {
+                      <span class="badge-default">Default</span>
+                    }
+                  </div>
+                  <div class="addr-actions">
+                    @if (!addr.isDefault) {
+                      <button
+                        type="button"
+                        class="btn-text-subtle"
+                        (click)="setDefaultAddress(addr)"
+                      >
+                        Set Default
+                      </button>
+                    }
+                    <button
+                      type="button"
+                      class="btn-text-danger"
+                      (click)="deleteAddress(addr)"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <p class="addr-location">{{ addr.location }}</p>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    </div>
+  }
 </main>

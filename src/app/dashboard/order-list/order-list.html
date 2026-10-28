@@ -1,0 +1,126 @@
+<div class="dash-section">
+  <div class="dash-section__head">
+    <div>
+      <span class="eyebrow">ORDER MANAGEMENT</span>
+      <h2>Orders Pipeline</h2>
+    </div>
+    <button class="btn-refresh" (click)="loadOrders()" [disabled]="isLoading()">
+      ↻ Refresh
+    </button>
+  </div>
+
+  @if (successMsg()) {
+    <div class="alert alert--success">{{ successMsg() }}</div>
+  }
+
+  @if (error()) {
+    <div class="alert alert--error">{{ error() }}</div>
+  }
+
+  <!-- Controls: Search & Status Filter -->
+  <div class="dash-toolbar">
+    <div class="search-wrap">
+      <input
+        type="search"
+        placeholder="Search by customer, email, phone, or order ID..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+      />
+    </div>
+
+    <div class="filter-wrap">
+      <label for="statusFilter">Status:</label>
+      <select
+        id="statusFilter"
+        [ngModel]="statusFilter()"
+        (ngModelChange)="statusFilter.set($event)"
+      >
+        <option value="all">All Statuses</option>
+        <option value="pending">Pending</option>
+        <option value="preparing">Preparing</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled by admin">Cancelled</option>
+      </select>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="dash-loading">
+      <p>Loading orders...</p>
+    </div>
+  } @else if (filteredOrders.length === 0) {
+    <div class="dash-empty">
+      <p>No orders found matching the filter.</p>
+    </div>
+  } @else {
+    <div class="orders-table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Address & Phone</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Update Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of filteredOrders; track order._id) {
+            <tr>
+              <td class="font-mono">
+                <strong>#{{ order._id.slice(-6) }}</strong>
+                <div class="order-date">
+                  {{ (order.orderedAt || order.createdAt) | date: 'short' }}
+                </div>
+              </td>
+              <td>
+                <div class="cust-name">{{ order.user?.name || 'Customer' }}</div>
+                <div class="cust-email">{{ order.user?.email || 'N/A' }}</div>
+              </td>
+              <td class="addr-cell">
+                <div class="addr-loc">{{ order.address }}</div>
+                <div class="addr-phone">📞 {{ order.phone }}</div>
+              </td>
+              <td>
+                <span class="items-count">{{ order.orderItems.length }} item(s)</span>
+                <ul class="items-mini-list">
+                  @for (it of order.orderItems; track it.name) {
+                    <li>{{ it.quantity }}× {{ it.name }}</li>
+                  }
+                </ul>
+              </td>
+              <td class="total-cell">
+                {{ getOrderTotal(order) | currency }}
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(order.status)">
+                  {{ order.status }}
+                </span>
+              </td>
+              <td>
+                <select
+                  class="status-select"
+                  [disabled]="updatingOrderId() === order._id"
+                  [value]="order.status"
+                  (change)="updateStatus(order, $any($event.target).value)"
+                >
+                  @for (st of availableStatuses; track st) {
+                    <option [value]="st" [selected]="st === order.status">
+                      {{ st | titlecase }}
+                    </option>
+                  }
+                </select>
+                @if (updatingOrderId() === order._id) {
+                  <span class="updating-text">Saving...</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,264 @@
+:host {
+  display: block;
+}
+
+.info-page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 50px 5% 100px;
+}
+
+/* Nav Tabs */
+.info-nav {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid #e2ded5;
+  padding-bottom: 0.5rem;
+  margin-bottom: 3.5rem;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 0;
+  padding: 0.6rem 1.25rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: #72766d;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: #272c25;
+  background: #f1eee6;
+}
+
+.tab-btn--active {
+  color: #272c25;
+  background: #ede8dc;
+  font-weight: 600;
+}
+
+/* Header */
+.block-header {
+  margin-bottom: 3rem;
+  max-width: 650px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #858a80;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.block-header h1 {
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 500;
+  letter-spacing: -2.5px;
+  color: #272c25;
+  line-height: 1.05;
+  margin: 0 0 1rem;
+}
+
+.block-header h1 em {
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: #a45d42;
+}
+
+.lead {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #6a6f65;
+  margin: 0;
+}
+
+/* About Grid */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.about-card {
+  background: #faf8f4;
+  border: 1px solid #e7e2d6;
+  border-radius: 10px;
+  padding: 1.75rem;
+}
+
+.about-card h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #272c25;
+  margin: 0 0 0.75rem;
+}
+
+.about-card p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #6a6f65;
+  margin: 0;
+}
+
+/* Contact Grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: #faf8f4;
+  border: 1px solid #e7e2d6;
+  border-radius: 10px;
+  padding: 1.75rem;
+}
+
+.contact-item strong {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #858a80;
+  margin-bottom: 0.25rem;
+}
+
+.contact-item p {
+  font-size: 14px;
+  color: #272c25;
+  margin: 0;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #555850;
+}
+
+.form-field input,
+.form-field textarea {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #d8d3c7;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  background: #ffffff;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: #272c25;
+}
+
+.btn-submit {
+  align-self: flex-start;
+  padding: 0.8rem 1.6rem;
+  background: #272c25;
+  color: #ffffff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background: #a45d42;
+}
+
+.alert--success {
+  background: #edf7ed;
+  color: #1e4620;
+  border: 1px solid #c7e6c9;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* FAQ List */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.faq-item {
+  background: #faf8f4;
+  border: 1px solid #e7e2d6;
+  border-radius: 8px;
+  padding: 1.5rem 1.75rem;
+}
+
+.faq-item h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #272c25;
+  margin: 0 0 0.5rem;
+}
+
+.faq-item p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #686d63;
+  margin: 0;
+}
+
+/* Policies */
+.policies-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.policy-section h3 {
+  font-size: 1.15rem;
+  color: #272c25;
+  margin: 0 0 0.5rem;
+}
+
+.policy-section p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #686d63;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

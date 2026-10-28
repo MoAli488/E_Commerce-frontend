@@ -25,7 +25,10 @@ export interface Order {
   address: string;
   phone: string;
   status: OrderStatus;
+  orderedAt?: string | Date;
+  createdAt?: string | Date;
 }
+
 
 // Helper interface when placing a new order from the frontend
 export interface CreateOrderDto {

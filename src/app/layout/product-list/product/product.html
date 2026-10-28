@@ -8,7 +8,10 @@
     <span class="tile-action">View details ↗</span>
   </div>
   <div class="tile-info">
-    <h3>{{ myProduct.title }}</h3>
-    <span>Discover the details</span>
+    <div class="tile-header">
+      <h3>{{ myProduct.title }}</h3>
+      <span class="tile-price">${{ myProduct.price }}</span>
+    </div>
+    <span class="tile-category">{{ myProduct.category?.name || 'Everyday' }}</span>
   </div>
 </a>

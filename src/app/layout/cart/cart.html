@@ -4,9 +4,14 @@
     <header class="cart-header">
       <h1 class="cart-title">Your Cart</h1>
       @if (!isLoading() && !error()) {
-        <span class="cart-count"
-          >{{ itemCount }} {{ itemCount === 1 ? 'item' : 'items' }}</span
-        >
+        <div class="cart-header-actions">
+          <span class="cart-count"
+            >{{ itemCount }} {{ itemCount === 1 ? 'item' : 'items' }}</span
+          >
+          @if (cartItems.length > 0) {
+            <button class="btn-clear" (click)="clearCart()">Clear cart</button>
+          }
+        </div>
       }
     </header>
 
@@ -62,7 +67,7 @@
         </svg>
         <h2>Your cart is empty</h2>
         <p>Looks like you haven't added anything yet.</p>
-        <a routerLink="/" class="btn-primary">Start Shopping</a>
+        <a routerLink="/product-list" class="btn-primary">Start Shopping</a>
       </div>
     }
 
@@ -72,7 +77,10 @@
         <!-- Items List -->
         <div class="cart-items">
           @for (cartItem of cartItems; track cartItem._id) {
-            <article class="cart-item">
+            <article
+              class="cart-item"
+              [class.updating]="updatingItemId() === cartItem._id"
+            >
               <div class="cart-item__image-wrap">
                 <img
                   [src]="staticURL + cartItem.item.imageURL"
@@ -100,10 +108,30 @@
               </div>
 
               <div class="cart-item__meta">
-                <div class="cart-item__qty-badge">
-                  <span class="qty-label">Qty</span>
+                <!-- Quantity Controls -->
+                <div class="cart-item__qty-controls">
+                  <button
+                    class="qty-btn"
+                    (click)="updateQuantity(cartItem, -1)"
+                    [disabled]="
+                      cartItem.quantity <= 1 ||
+                      updatingItemId() === cartItem._id
+                    "
+                    aria-label="Decrease quantity"
+                  >
+                    −
+                  </button>
                   <span class="qty-value">{{ cartItem.quantity }}</span>
+                  <button
+                    class="qty-btn"
+                    (click)="updateQuantity(cartItem, 1)"
+                    [disabled]="updatingItemId() === cartItem._id"
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
                 </div>
+
                 <p class="cart-item__price">
                   {{
                     cartItem.item.price * cartItem.quantity
@@ -116,6 +144,15 @@
                   }}
                   each
                 </p>
+
+                <button
+                  class="btn-remove"
+                  (click)="removeItem(cartItem)"
+                  [disabled]="updatingItemId() === cartItem._id"
+                  aria-label="Remove item"
+                >
+                  Remove
+                </button>
               </div>
             </article>
           }
@@ -159,7 +196,9 @@
             </svg>
           </a>
 
-          <a routerLink="/" class="btn-continue">← Continue Shopping</a>
+          <a routerLink="/product-list" class="btn-continue"
+            >← Continue Shopping</a
+          >
         </aside>
       </div>
     }

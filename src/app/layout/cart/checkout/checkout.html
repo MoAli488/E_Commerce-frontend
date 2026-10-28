@@ -1,1 +1,148 @@
-<p>checkout works!</p>
+<section class="checkout-page">
+  <div class="checkout-container">
+    <header class="checkout-header">
+      <a routerLink="/cart" class="back-link">← Back to Cart</a>
+      <h1>Checkout</h1>
+    </header>
+
+    @if (isLoading()) {
+      <div class="checkout-state">
+        <div class="spinner"></div>
+        <p>Loading…</p>
+      </div>
+    }
+
+    @if (!isLoading() && successMessage()) {
+      <div class="checkout-state success-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="8 12 11 15 16 9"/>
+        </svg>
+        <h2>{{ successMessage() }}</h2>
+        <p>Redirecting to your orders…</p>
+      </div>
+    }
+
+    @if (!isLoading() && !successMessage()) {
+      <div class="checkout-grid">
+        <!-- Form -->
+        <div class="checkout-form-wrap">
+          <h2 class="section-title">Delivery Details</h2>
+
+          @if (error()) {
+            <div class="form-error-banner">{{ error() }}</div>
+          }
+
+          <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Phone -->
+            <div class="form-group" [ngClass]="{'has-error': checkoutForm.controls.phone.invalid && checkoutForm.controls.phone.touched}">
+              <label for="phone">Phone Number *</label>
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                placeholder="e.g. 01012345678"
+              />
+              @if (checkoutForm.controls.phone.errors?.['required'] && checkoutForm.controls.phone.touched) {
+                <span class="field-error">Phone number is required.</span>
+              }
+              @if (checkoutForm.controls.phone.errors?.['pattern'] && checkoutForm.controls.phone.touched) {
+                <span class="field-error">Enter a valid Egyptian phone number.</span>
+              }
+            </div>
+
+            <!-- Address Type Toggle -->
+            @if (addresses().length > 0) {
+              <div class="form-group">
+                <label>Delivery Address</label>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" formControlName="addressType" value="saved" />
+                    <span>Use a saved address</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" formControlName="addressType" value="new" />
+                    <span>Enter a new address</span>
+                  </label>
+                </div>
+              </div>
+            }
+
+            <!-- Saved Address Picker -->
+            @if (addressType === 'saved' && addresses().length > 0) {
+              <div class="form-group">
+                <label for="savedAddress">Select Address</label>
+                <select id="savedAddress" formControlName="savedAddressId">
+                  <option value="">-- Choose an address --</option>
+                  @for (addr of addresses(); track addr._id) {
+                    <option [value]="addr._id">
+                      {{ addr.title ? addr.title + ': ' : '' }}{{ addr.location }}
+                    </option>
+                  }
+                </select>
+              </div>
+            }
+
+            <!-- New Address Input -->
+            @if (addressType === 'new' || addresses().length === 0) {
+              <div class="form-group" [ngClass]="{'has-error': checkoutForm.controls.newAddress.invalid && checkoutForm.controls.newAddress.touched}">
+                <label for="newAddress">Delivery Address *</label>
+                <textarea
+                  id="newAddress"
+                  formControlName="newAddress"
+                  rows="3"
+                  placeholder="Enter your full delivery address…"
+                ></textarea>
+                @if (checkoutForm.controls.newAddress.errors?.['required'] && checkoutForm.controls.newAddress.touched) {
+                  <span class="field-error">Address is required.</span>
+                }
+                @if (checkoutForm.controls.newAddress.errors?.['minlength'] && checkoutForm.controls.newAddress.touched) {
+                  <span class="field-error">Address must be at least 5 characters.</span>
+                }
+              </div>
+            }
+
+            <button
+              type="submit"
+              class="btn-place-order"
+              [disabled]="isSubmitting()"
+            >
+              @if (isSubmitting()) {
+                <span class="spinner-sm"></span>
+                Placing order…
+              } @else {
+                Place Order
+                <span>↗</span>
+              }
+            </button>
+          </form>
+        </div>
+
+        <!-- Order Summary -->
+        <aside class="checkout-summary">
+          <h2 class="section-title">Your Order</h2>
+
+          <div class="order-items">
+            @for (item of cartItems; track item._id) {
+              <div class="order-item">
+                <span class="order-item__name">{{ item.item.title }}</span>
+                <span class="order-item__qty">× {{ item.quantity }}</span>
+                <span class="order-item__price">{{ item.item.price * item.quantity | currency: 'EGP ' : 'symbol' : '1.2-2' }}</span>
+              </div>
+            }
+          </div>
+
+          <div class="order-divider"></div>
+
+          <div class="order-total">
+            <span>Total</span>
+            <strong>{{ subtotal | currency: 'EGP ' : 'symbol' : '1.2-2' }}</strong>
+          </div>
+
+          <p class="order-note">Free shipping · Easy returns within 30 days</p>
+        </aside>
+      </div>
+    }
+  </div>
+</section>

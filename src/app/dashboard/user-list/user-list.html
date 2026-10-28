@@ -1,1 +1,90 @@
-<p>user-list works!</p>
+<div class="dash-section">
+  <div class="dash-section__head">
+    <h2>Users</h2>
+    <a routerLink="/dashboard/create-user" class="btn-add">+ Add User</a>
+  </div>
+
+  @if (successMsg()) {
+    <div class="alert alert--success">{{ successMsg() }}</div>
+  }
+
+  @if (error()) {
+    <div class="alert alert--error">{{ error() }}</div>
+  }
+
+  <!-- Search -->
+  <div class="search-bar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input
+      type="text"
+      placeholder="Search by name or email…"
+      [value]="searchTerm()"
+      (input)="searchTerm.set($any($event.target).value)"
+    />
+  </div>
+
+  @if (isLoading()) {
+    <div class="dash-state">
+      <div class="spinner"></div>
+      <p>Loading users…</p>
+    </div>
+  }
+
+  @if (!isLoading() && filteredUsers.length === 0) {
+    <div class="dash-state">
+      <p>No users found.</p>
+    </div>
+  }
+
+  @if (!isLoading() && filteredUsers.length > 0) {
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of filteredUsers; track user._id) {
+            <tr [ngClass]="{'row--deleted': user.isDeleted, 'row--blocked': user.isBlocked}">
+              <td>{{ user.name | titlecase }}</td>
+              <td class="email-cell">{{ user.email }}</td>
+              <td>
+                <span class="role-badge" [ngClass]="user.role === 'admin' ? 'role--admin' : 'role--user'">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td>
+                @if (user.isDeleted) {
+                  <span class="status-badge status--deleted">Deleted</span>
+                } @else if (user.isBlocked) {
+                  <span class="status-badge status--blocked">Blocked</span>
+                } @else {
+                  <span class="status-badge status--active">Active</span>
+                }
+              </td>
+              <td class="actions-cell">
+                @if (!user.isDeleted) {
+                  <button
+                    class="btn-danger"
+                    (click)="deleteUser(user)"
+                    [disabled]="deletingId() === user._id"
+                  >
+                    {{ deletingId() === user._id ? '…' : 'Delete' }}
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

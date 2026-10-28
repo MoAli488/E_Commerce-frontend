@@ -76,13 +76,12 @@ function extractErrorMessage(error: HttpErrorResponse): string {
  */
 export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const authService = inject(AuthService, { optional: true });
+  const authService = inject(AuthService);
 
   return next(req).pipe(
     catchError((error: unknown) => {
       if (error instanceof HttpErrorResponse) {
         const errorMessage = extractErrorMessage(error);
-        alert(errorMessage);
 
         // Structured diagnostic logging
         console.error(
@@ -97,10 +96,10 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
           }
           case 401: {
             // Unauthorized / Token expired: clear credentials and navigate to login
-            if (authService) {
+            if (router.url.includes('login'))
+              alert('Invalid email or password');
+            else {
               authService.logout();
-            } else {
-              localStorage.removeItem('token');
             }
 
             if (router) {

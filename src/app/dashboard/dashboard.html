@@ -1,1 +1,45 @@
-<router-outlet></router-outlet>
+<div class="dash-layout">
+  <!-- Admin Navigation Bar -->
+  <header class="dash-nav">
+    <div class="dash-nav__inner">
+      <div class="dash-nav__brand">
+        <a routerLink="/dashboard/home" class="brand-link">
+          <strong>form</strong><span>.admin</span>
+        </a>
+      </div>
+
+      <nav class="dash-nav__links">
+        <a routerLink="/dashboard/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          Overview
+        </a>
+        <a routerLink="/dashboard/products" routerLinkActive="active">
+          Products
+        </a>
+        <a routerLink="/dashboard/orders" routerLinkActive="active">
+          Orders
+        </a>
+        <a routerLink="/dashboard/users" routerLinkActive="active">
+          Users
+        </a>
+      </nav>
+
+      <div class="dash-nav__actions">
+        <a routerLink="/home" class="store-link" title="Open Public Storefront">
+          Storefront ↗
+        </a>
+        @if (userData(); as user) {
+          <span class="user-pill">
+            <span class="role-dot"></span>
+            {{ user.name | titlecase }}
+          </span>
+          <button class="logout-btn" (click)="logout()">Sign Out</button>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- Routed Dashboard Content -->
+  <main class="dash-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

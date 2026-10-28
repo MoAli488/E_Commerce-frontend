@@ -1,5 +1,7 @@
 export interface IAddress {
-  user: string;
+  _id?: string;
+  user?: string;
   title?: string;
   location: string;
+  isDefault?: boolean;
 }

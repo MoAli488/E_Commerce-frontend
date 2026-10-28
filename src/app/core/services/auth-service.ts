@@ -12,10 +12,22 @@ export class AuthService {
   private _apiURL = enviroment.apiURL + 'auth/';
   private _router = inject(Router);
 
-  private userData = new BehaviorSubject<IToken | null>(null);
+  private userData = new BehaviorSubject<IToken | null>(this.getInitialUser());
 
   getUserData() {
     return this.userData.asObservable();
+  }
+
+  private getInitialUser(): IToken | null {
+    const token = this.getToken();
+    if (token) {
+      const decode = this.decodeToken(token);
+      if (decode?.exp && Date.now() < decode.exp * 1000) {
+        return decode;
+      }
+      localStorage.removeItem('token');
+    }
+    return null;
   }
 
   login(data: ILoginReq) {
@@ -50,21 +62,24 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     this.userData.next(null);
-    this._router.navigate(['/']);
+    // this._router.navigate(['/']);
   }
 
-  checkIfLoggedIn(): void {
+  checkIfLoggedIn(): boolean {
     const token = this.getToken();
     if (token) {
       const decode = this.decodeToken(token);
       if (decode?.exp) {
         const expireDate = decode.exp * 1000;
         if (Date.now() < expireDate) {
-          return this.userData.next(decode);
+          if (!this.userData.value) {
+            this.userData.next(decode);
+          }
+          return true;
         }
       }
     }
-    this.logout();
+    return false;
   }
 
   ifAuthorized(role: string) {

@@ -7,33 +7,140 @@
       again and again.
     </p>
   </div>
+
+  <!-- Search & Filter Controls -->
+  <section class="catalog-controls">
+    <!-- Search Bar -->
+    <div class="search-box">
+      <input
+        type="search"
+        placeholder="Search collection by title..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        (keyup.enter)="onSearch()"
+      />
+      <button type="button" class="btn-search" (click)="onSearch()">
+        Search
+      </button>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div class="category-pills">
+      <button
+        type="button"
+        class="pill"
+        [class.pill--active]="selectedCategory() === 'all'"
+        (click)="selectCategory('all')"
+      >
+        All Pieces
+      </button>
+      @for (cat of categories(); track cat) {
+        <button
+          type="button"
+          class="pill"
+          [class.pill--active]="selectedCategory() === cat"
+          (click)="selectCategory(cat)"
+        >
+          {{ cat }}
+        </button>
+      }
+    </div>
+
+    <!-- Price Filter Dropdown & Status -->
+    <div class="sub-filters">
+      <div class="price-filter">
+        <label for="priceRange">Price:</label>
+        <select
+          id="priceRange"
+          [ngModel]="selectedPriceRange()"
+          (ngModelChange)="selectPriceRange($event)"
+        >
+          <option value="all">All Prices</option>
+          <option value="under50">Under $50</option>
+          <option value="50to100">$50 to $100</option>
+          <option value="over100">Over $100</option>
+        </select>
+      </div>
+
+      @if (searchQuery() || selectedCategory() !== 'all' || selectedPriceRange() !== 'all') {
+        <button type="button" class="btn-reset" (click)="resetFilters()">
+          Clear Filters ✕
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Toolbar Count -->
   <div class="catalog-toolbar">
-    <span
-      >OUR PRODUCTS
-      @if (!loading && !errorMessage) {
-        <small>{{ products.length }} pieces</small>
-      }</span
-    ><span>New season · Timeless by design</span>
+    <span>
+      OUR PRODUCTS
+      @if (!loading() && !errorMessage()) {
+        <small>{{ products().length }} shown · Page {{ currentPage() }} of {{ totalPages() }}</small>
+      }
+    </span>
+    <span>New season · Timeless by design</span>
   </div>
-  @if (loading) {
+
+  <!-- Content States -->
+  @if (loading()) {
     <div class="catalog-state">
       <span class="state-mark">✳</span>
       <p>Gathering the collection...</p>
     </div>
-  } @else if (errorMessage) {
+  } @else if (errorMessage()) {
     <div class="catalog-state">
       <span class="state-mark">—</span>
-      <p>{{ errorMessage }}</p>
+      <p>{{ errorMessage() }}</p>
+      <button class="btn-retry" (click)="fetchProducts()">Try again</button>
     </div>
   } @else {
     <div class="catalog-grid">
-      @for (product of products; track product.slug) {
+      @for (product of products(); track product.slug) {
         <app-product [myProduct]="product"></app-product>
       } @empty {
-        <p class="empty-state">
-          Products are not available right now. Please try again shortly.
-        </p>
+        <div class="empty-state">
+          <p>No products match your current search or filters.</p>
+          <button class="btn-reset-filters" (click)="resetFilters()">
+            View All Products
+          </button>
+        </div>
       }
     </div>
+
+    <!-- Pagination Controls -->
+    @if (totalPages() > 1) {
+      <nav class="pagination-wrap" aria-label="Catalog pages">
+        <button
+          type="button"
+          class="page-nav-btn"
+          [disabled]="currentPage() === 1"
+          (click)="goToPage(currentPage() - 1)"
+        >
+          ← Prev
+        </button>
+
+        <div class="page-numbers">
+          @for (page of pagesArray; track page) {
+            <button
+              type="button"
+              class="page-num"
+              [class.page-num--active]="page === currentPage()"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="page-nav-btn"
+          [disabled]="currentPage() === totalPages()"
+          (click)="goToPage(currentPage() + 1)"
+        >
+          Next →
+        </button>
+      </nav>
+    }
   }
 </main>

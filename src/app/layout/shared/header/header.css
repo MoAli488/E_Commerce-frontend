@@ -56,8 +56,22 @@
 
 .nav-wrap nav a:hover,
 .nav-wrap nav a.active,
-.account-link:hover {
+.account-link:hover,
+.account-link.active {
   color: #a45d42;
+}
+
+.nav-wrap nav a.nav-dashboard {
+  color: #292e27;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: #edebe2;
+  border-radius: 4px;
+}
+
+.nav-wrap nav a.nav-dashboard:hover {
+  background: #292e27;
+  color: #ffffff;
 }
 
 .nav-wrap nav a:focus-visible,
