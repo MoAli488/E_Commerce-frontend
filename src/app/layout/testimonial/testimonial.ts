@@ -73,7 +73,7 @@ export class Testimonial implements OnInit {
     this._authService.getUserData().subscribe({
       next: (user) => {
         this.currentUser = user;
-        this.isLoggedIn = !!user;
+        this.isLoggedIn = Boolean(user);
         this._cdr.detectChanges();
       },
     });
@@ -104,7 +104,10 @@ export class Testimonial implements OnInit {
 
   get averageRating(): string {
     if (!this.testimonials || this.testimonials.length === 0) return '5.0';
-    const sum = this.testimonials.reduce((acc, curr) => acc + (curr.rate || 5), 0);
+    const sum = this.testimonials.reduce(
+      (acc, curr) => acc + (curr.rate || 5),
+      0,
+    );
     return (sum / this.testimonials.length).toFixed(1);
   }
 
@@ -129,7 +132,8 @@ export class Testimonial implements OnInit {
 
   submitReview(): void {
     if (!this.newComment.trim() || this.newComment.trim().length < 3) {
-      this.formError = 'Please provide a short comment sharing your experience.';
+      this.formError =
+        'Please provide a short comment sharing your experience.';
       return;
     }
 

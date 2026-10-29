@@ -110,7 +110,6 @@ export class CreateProduct {
         };
         this.productForm.reset();
         this.selectedFile = null;
-        // this.imagePreview = null;
       },
       error: (err) => {
         this.isSubmitting = false;
