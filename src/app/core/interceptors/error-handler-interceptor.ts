@@ -4,26 +4,19 @@ import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 
-/**
- * Extracts a human-readable error message from an HttpErrorResponse.
- */
 function extractErrorMessage(error: HttpErrorResponse): string {
-  // Client-side or Network Error
   if (error.error instanceof ErrorEvent) {
     return error.error.message || 'A client-side network error occurred.';
   }
 
-  // Network offline / unreachable / CORS
   if (error.status === 0) {
     return 'Unable to connect to the server. Please check your internet connection.';
   }
 
-  // Server returned an explicit error string
   if (typeof error.error === 'string') {
     return error.error;
   }
 
-  // Server returned an error object/message
   if (error.error && typeof error.error === 'object') {
     if (typeof error.error.message === 'string' && error.error.message.trim()) {
       return error.error.message;
@@ -38,7 +31,6 @@ function extractErrorMessage(error: HttpErrorResponse): string {
     }
   }
 
-  // Standard status code fallback messages
   switch (error.status) {
     case 400:
       return 'Bad request. Please verify the submitted data.';
@@ -69,11 +61,6 @@ function extractErrorMessage(error: HttpErrorResponse): string {
   }
 }
 
-/**
- * Global HTTP Error Handler Interceptor.
- * Intercepts all failed HTTP requests, logs diagnostic info, manages authentication/authorization
- * redirects, provides user-friendly notifications, and forwards the error for local handling.
- */
 export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
@@ -83,7 +70,6 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
       if (error instanceof HttpErrorResponse) {
         const errorMessage = extractErrorMessage(error);
 
-        // Structured diagnostic logging
         console.error(
           `[HTTP Error] ${req.method} "${req.urlWithParams}" [${error.status} ${error.statusText || ''}]: ${errorMessage}`,
           error,
@@ -95,7 +81,6 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           }
           case 401: {
-            // Unauthorized / Token expired: clear credentials and navigate to login
             if (router.url.includes('login'))
               alert('Invalid email or password');
             else {
@@ -116,7 +101,6 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           }
           case 403: {
-            // Access denied / Forbidden
             console.warn(`[403 Forbidden] Access denied for URL: ${req.url}`);
             if (router && !router.url.includes('/login')) {
               router.navigate(['/']);
@@ -124,18 +108,13 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           }
           case 404: {
-            // Not Found
             console.warn(`[404 Not Found] Resource not found: ${req.url}`);
-            // if (router) {
-            //   router.navigate(['/not-found']);
-            // }
             break;
           }
           case 500:
           case 502:
           case 503:
           case 504: {
-            // Server-side errors: alert or notify the user gracefully
             if (
               typeof window !== 'undefined' &&
               typeof window.alert === 'function'
@@ -148,7 +127,6 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
             break;
         }
 
-        // Attach friendly message to the error object for downstream subscribers
         (error as any).friendlyMessage = errorMessage;
       } else {
         console.error('[HTTP Unknown Error]', error);

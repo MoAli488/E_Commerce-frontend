@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product-service';
 import { IProduct } from '../../core/models/product.model';
@@ -91,7 +97,9 @@ export class ProductList implements OnInit {
       },
       error: (err) => {
         if (!enviroment.isProduction) console.error(err);
-        this.errorMessage.set('Could not load products. Please check back shortly.');
+        this.errorMessage.set(
+          'Could not load products. Please check back shortly.',
+        );
         this.loading.set(false);
         this._cdr.detectChanges();
       },
@@ -124,7 +132,8 @@ export class ProductList implements OnInit {
   }
 
   goToPage(page: number): void {
-    if (page < 1 || page > this.totalPages() || page === this.currentPage()) return;
+    if (page < 1 || page > this.totalPages() || page === this.currentPage())
+      return;
     this.currentPage.set(page);
     this.fetchProducts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
