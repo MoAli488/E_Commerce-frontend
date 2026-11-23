@@ -30,6 +30,7 @@
   - [Development Server](#development-server)
   - [Production Build](#production-build)
 - [Application Flow & Routes](#-application-flow--routes)
+- [Backend Repository](#-backend-repository)
 - [Author & Acknowledgments](#-author--acknowledgments)
 
 ---
@@ -250,6 +251,12 @@ The build artifacts will be stored in the `dist/frontend` directory ready to be 
 | `/dashboard/orders`         | `OrderList`           | `adminGuard`   | Process & update order status         |
 | `/dashboard/users`          | `UserList`            | `adminGuard`   | Customer & Admin directory            |
 | `/**`                       | `NotFound`            | Public         | Custom 404 page                       |
+
+---
+
+## 🔗 Backend Repository
+
+The backend API for this application is available in the [E-Commerce backend repository](https://github.com/MoAli488/E_Commerce-backend.git).
 
 ---
 
